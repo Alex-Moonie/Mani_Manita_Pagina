@@ -121,7 +121,9 @@
 
             if (mensajeCodificado) {
                 try {
+                    // Decodifica el mensaje primero
                     mensajeMostrar = decodeURIComponent(mensajeCodificado);
+                    mensajeMostrar = mensajeMostrar.replace(/\+/g,' ');
                 } catch (e) {
                     mensajeMostrar = "Error al leer el mensaje. El código es inválido.";
                 }
