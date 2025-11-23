@@ -1,0 +1,21 @@
+{
+  "name": "Mani Manita - Traductor LDS",
+  "short_name": "Mani Manita",
+  "description": "Traductor de Lenguaje de Señas con Generador QR",
+  "start_url": "/Mani_Manita_Pagina/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2c70d4",
+  "icons": [
+    {
+      "src": "/Mani_Manita_Pagina/icono.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/Mani_Manita_Pagina/icono.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
