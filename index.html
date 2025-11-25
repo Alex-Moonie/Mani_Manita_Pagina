@@ -1,35 +1,35 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
-    
+   
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mani_Manita - Traductor de Lenguaje de Señas</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    
+   
     <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <link rel="manifest" href="/Mani_Manita_Pagina/manifest.json">
-    
-<style>                             
+   
+<style>                            
     :root {
-        --cute-pink: #FF69B4;       
-        --cute-orange: #FFA500;     
-        --cute-teal: #00CED1;       
-        --cute-yellow: #FFD700;     
-        
-        --space-pastel: #A2D9CE;     
-        --num-pastel: #FFC9A3;       
+        --cute-pink: #FF69B4;      
+        --cute-orange: #FFA500;    
+        --cute-teal: #00CED1;      
+        --cute-yellow: #FFD700;    
+       
+        --space-pastel: #A2D9CE;    
+        --num-pastel: #FFC9A3;      
         --copy-pastel: #FFF59D;      
-        --clear-pastel: #FFC0CB;     
+        --clear-pastel: #FFC0CB;    
         --delete-pastel: #F4A5B7;    
 
         --primary-color: var(--cute-teal);      
         --danger-color: var(--delete-pastel);
-        --switch-mode-color: #9370DB;           
-        
-        --bg-gradient: linear-gradient(135deg, 
-            #FFC0CB, #FFD7A8, #FFFACD, 
+        --switch-mode-color: #9370DB;          
+       
+        --bg-gradient: linear-gradient(135deg,
+            #FFC0CB, #FFD7A8, #FFFACD,
             #B0E0E6, #98FB98, #E6E6FA,
             #FFC0CB
         );
@@ -37,7 +37,7 @@
         --text-color: #333333;                  
         --light-text-color: #777777;            
         --border-color: #e0e0e0;                
-        
+       
         --concept-color: var(--cute-pink);      
         --connected-color: var(--cute-teal);    
 
@@ -45,10 +45,10 @@
         --dark-card-bg-color: #1E1E1E;
         --dark-text-color: #E0E0E0;
         --dark-border-color: #333333;
-        --dark-gradient: linear-gradient(135deg, #2C3E50, #000000); 
+        --dark-gradient: linear-gradient(135deg, #2C3E50, #000000);
     }
 
-    .dark-mode { 
+    .dark-mode {
         background: var(--dark-gradient) !important;
         background-size: 400% 400% !important;
         animation: gradientShift 30s ease infinite !important;
@@ -62,15 +62,15 @@
     }
 
     .dark-mode h1, .dark-mode .config-button, .dark-mode .logo-section {
-        color: var(--cute-pink) !important; 
+        color: var(--cute-pink) !important;
     }
 
     .dark-mode .mode-status {
-        background-color: var(--cute-teal) !important; 
+        background-color: var(--cute-teal) !important;
     }
 
     .dark-mode #output-area, .dark-mode #text-input-area, .dark-mode .sign-button {
-        background-color: #2D2D2D !important; 
+        background-color: #2D2D2D !important;
         color: var(--dark-text-color) !important;
         border: 4px solid var(--cute-teal) !important;
     }
@@ -80,16 +80,16 @@
     }
 
     .dark-mode .sign-button {
-        border: 4px solid transparent !important; 
-        
+        border: 4px solid transparent !important;
+       
         border-image-source: linear-gradient(
-            to right, 
-            #FFC0CB,   
-            #FFDDAF,   
-            #A0E7E5,   
+            to right,
+            #FFC0CB,  
+            #FFDDAF,  
+            #A0E7E5,  
             #DCD0FF    
         ) !important;
-        border-image-slice: 1 !important; 
+        border-image-slice: 1 !important;
     }
 
     .dark-mode .sign-button span {
@@ -109,13 +109,13 @@
         100% { background-position: 0% 50%; }
     }
 
-    body { 
-        font-family: 'Baloo 2', sans-serif; 
-        margin: 0; 
-        padding: 0; 
+    body {
+        font-family: 'Baloo 2', sans-serif;
+        margin: 0;
+        padding: 0;
         background: var(--bg-gradient);
         background-size: 400% 400%;
-        animation: gradientShift 25s ease infinite; 
+        animation: gradientShift 25s ease infinite;
         color: var(--text-color);
         text-align: center;
         line-height: 1.6;
@@ -128,22 +128,22 @@
     .container {
         max-width: 900px;
         width: 100%;
-        background-color: var(--card-bg-color); 
-        border-radius: 20px; 
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15), 0 0 15px rgba(255, 255, 255, 0.8) inset; 
-        padding: 20px 15px; 
-        margin-bottom: 20px; 
-        box-sizing: border-box; 
-        transition: box-shadow 0.3s ease; 
+        background-color: var(--card-bg-color);
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15), 0 0 15px rgba(255, 255, 255, 0.8) inset;
+        padding: 20px 15px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+        transition: box-shadow 0.3s ease;
     }
-    
+   
     h1 {
-        color: var(--cute-pink); 
+        color: var(--cute-pink);
         font-weight: 700;
         margin-bottom: 5px;
-        font-size: 2.2em; 
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); 
-        font-family: 'Sacramento', cursive; 
+        font-size: 2.2em;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        font-family: 'Sacramento', cursive;
         line-height: 1;
     }
 
@@ -151,144 +151,144 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 15px; 
+        margin-bottom: 15px;
         padding-bottom: 10px;
-        border-bottom: 2px dashed var(--cute-teal); 
+        border-bottom: 2px dashed var(--cute-teal);
     }
-    
+   
     .logo-section h1 {
          margin: 0;
-         flex-grow: 1; 
+         flex-grow: 1;
          text-align: left;
     }
-    
+   
     .logo-section img {
-        max-width: 60px; 
+        max-width: 60px;
         height: auto;
-        border-radius: 50%; 
-        box-shadow: 0 0 10px var(--cute-orange); 
+        border-radius: 50%;
+        box-shadow: 0 0 10px var(--cute-orange);
         margin-right: 15px;
     }
-    
+   
     .config-button {
          background: none; border: none; font-size: 28px; cursor: pointer;
-         color: var(--cute-pink); 
+         color: var(--cute-pink);
          padding: 5px; margin-left: auto;
-         transition: color 0.2s, transform 0.2s; 
+         transition: color 0.2s, transform 0.2s;
     }
-    
+   
     #text-area-group {
-        width: 100%; 
+        width: 100%;
     }
 
-    .mode-status { 
-        font-size: 1.2em; 
-        font-weight: 700; 
-        color: white; 
+    .mode-status {
+        font-size: 1.2em;
+        font-weight: 700;
+        color: white;
         padding: 10px 20px;
-        margin-bottom: 15px; 
-        border-radius: 25px; 
-        background-color: var(--connected-color); 
+        margin-bottom: 15px;
+        border-radius: 25px;
+        background-color: var(--connected-color);
         box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-        
-        display: flex; 
-        justify-content: center; 
+       
+        display: flex;
+        justify-content: center;
         align-items: center;
         text-align: center;
-        
-        width: 100%; 
-        flex-shrink: 0; 
-        box-sizing: border-box; 
-        
+       
+        width: 100%;
+        flex-shrink: 0;
+        box-sizing: border-box;
+       
         margin-left: auto;
         margin-right: auto;
     }
-    
-    #output-area { 
-        min-height: 120px; 
-        border: 4px solid var(--primary-color); 
-        padding: 12px; 
-        margin-bottom: 15px; 
-        font-size: 1.8em; 
+   
+    #output-area {
+        min-height: 120px;
+        border: 4px solid var(--primary-color);
+        padding: 12px;
+        margin-bottom: 15px;
+        font-size: 1.8em;
         text-align: left;
-        border-radius: 15px; 
-        background-color: #FFFFFF; 
+        border-radius: 15px;
+        background-color: #FFFFFF;
         box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
         display: flex; flex-wrap: wrap; align-items: flex-start;
-        gap: 4px; overflow-y: auto; 
-        width: 100%; 
-        box-sizing: border-box; 
+        gap: 4px; overflow-y: auto;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     #output-area .sign-output-image {
-        height: 45px; 
+        height: 45px;
         width: auto; object-fit: contain; vertical-align: middle;
         transition: transform 0.2s;
     }
 
     .output-space {
-        width: 12px; height: 45px; background-color: var(--cute-yellow); 
+        width: 12px; height: 45px; background-color: var(--cute-yellow);
         border-radius: 5px; display: inline-block; vertical-align: middle; margin: 0 1px;
     }
-    
+   
     #text-input-area {
-        width: 100%; min-height: 100px; 
+        width: 100%; min-height: 100px;
         padding: 12px;
-        border: 4px solid var(--switch-mode-color); 
+        border: 4px solid var(--switch-mode-color);
         border-radius: 15px;
-        font-size: 1.2em; resize: vertical; margin-bottom: 15px; 
+        font-size: 1.2em; resize: vertical; margin-bottom: 15px;
         box-sizing: border-box;
-        font-family: 'Baloo 2', sans-serif; 
-        background-color: #FFFFFF; 
+        font-family: 'Baloo 2', sans-serif;
+        background-color: #FFFFFF;
         box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     .function-buttons {
-        display: flex; 
-        justify-content: center; 
-        gap: 10px; 
-        margin: 15px auto 10px; 
-        flex-wrap: wrap; 
-        width: 100%; 
-        box-sizing: border-box; 
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 15px auto 10px;
+        flex-wrap: wrap;
+        width: 100%;
+        box-sizing: border-box;
     }
-    
-    .function-buttons button { 
+   
+    .function-buttons button {
         border: none;
-        border-radius: 12px; 
-        height: 50px; 
-        font-size: 1em; 
+        border-radius: 12px;
+        height: 50px;
+        font-size: 1em;
         font-weight: 700;
         cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         padding: 0 12px;
-        box-shadow: 0 5px 0px rgba(0, 0, 0, 0.2); 
+        box-shadow: 0 5px 0px rgba(0, 0, 0, 0.2);
         flex-grow: 1;
-        min-width: 60px; 
-        box-sizing: border-box; 
-        color: white; 
+        min-width: 60px;
+        box-sizing: border-box;
+        color: white;
     }
-    
+   
     #num-mode-button {
         background-color: var(--num-pastel) !important;
         color: var(--text-color) !important;
     }
     #space-button {
-        background-color: var(--space-pastel) !important; 
-        color: var(--text-color) !important; 
+        background-color: var(--space-pastel) !important;
+        color: var(--text-color) !important;
     }
     #delete-button {
-        background-color: var(--delete-pastel) !important; 
-        color: white !important; 
+        background-color: var(--delete-pastel) !important;
+        color: white !important;
     }
     #clear-all-button {
-        background-color: var(--clear-pastel) !important; 
-        color: var(--text-color) !important; 
+        background-color: var(--clear-pastel) !important;
+        color: var(--text-color) !important;
     }
     #copy-button {
-        background-color: var(--copy-pastel) !important; 
-        color: var(--text-color) !important; 
+        background-color: var(--copy-pastel) !important;
+        color: var(--text-color) !important;
     }
     #mode-switch-button {
         background-color: var(--switch-mode-color) !important;
@@ -296,7 +296,7 @@
     }
 
     .function-buttons button:active {
-        transform: translateY(3px); 
+        transform: translateY(3px);
         box-shadow: 0 2px 0px rgba(0, 0, 0, 0.2);
     }
 
@@ -304,80 +304,80 @@
          opacity: 0.9;
          filter: brightness(1.1);
     }
-    
+   
     .panel-control-button {
-        width: 45px; 
-        height: 45px; 
-        font-size: 28px; 
+        width: 45px;
+        height: 45px;
+        font-size: 28px;
         background-color: var(--primary-color);
         color: white;
         border: none;
-        border-radius: 50%; 
+        border-radius: 50%;
         cursor: pointer;
-        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2); 
+        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
         transition: all 0.2s;
     }
 
 
     #main-interaction {
-        display: block; 
+        display: block;
         width: 100%;
     }
 
     #extra-controls-panel {
-        display: flex; 
-        justify-content: flex-end; 
+        display: flex;
+        justify-content: flex-end;
         width: 100%;
         margin-bottom: 5px;
     }
 
     #category-selector-panel {
-        display: none; 
+        display: none;
         justify-content: flex-end;
         gap: 10px;
         width: 100%;
         padding: 10px 0;
         margin-bottom: 10px;
-        border-top: 2px solid var(--cute-yellow); 
-        border-bottom: 2px solid var(--cute-yellow); 
-        background-color: #FFF8E1; 
-        border-radius: 10px; 
+        border-top: 2px solid var(--cute-yellow);
+        border-bottom: 2px solid var(--cute-yellow);
+        background-color: #FFF8E1;
+        border-radius: 10px;
     }
-    
+   
     .category-button {
-        padding: 8px 18px; 
+        padding: 8px 18px;
         font-size: 1em;
         font-weight: 700;
-        border: none !important; 
-        border-radius: 20px; 
+        border: none !important;
+        border-radius: 20px;
         color: white;
         transition: transform 0.2s, box-shadow 0.2s;
         box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
-        background-color: var(--concept-color); 
+        background-color: var(--concept-color);
     }
-    
+   
     .category-button[data-view="questions"] {
-         background-color: var(--cute-teal); 
+         background-color: var(--cute-teal);
     }
 
     .category-button:hover {
         transform: translateY(-2px);
         box-shadow: 0 5px 8px rgba(0, 0, 0, 0.25);
     }
-    
+   
     .keyboard-wrapper {
-         max-width: 100%; 
-         width: 100%; 
-         position: relative; 
+         max-width: 100%;
+         width: 100%;
+         position: relative;
     }
 
     .keyboard-view {
-        display: none; 
+        display: none;
     }
-    
+   
     .extra-keyboard-view {
-        display: none; 
-        position: absolute; 
+        display: none;
+        position: absolute;
         top: 0;
         left: 0;
         width: 100%;
@@ -388,133 +388,133 @@
         z-index: 10;
     }
 
-    
-    .keyboard-grid { 
-        display: grid; 
-        gap: 8px; 
-        margin: 0 !important; 
-        width: 100%; 
+   
+    .keyboard-grid {
+        display: grid;
+        gap: 8px;
+        margin: 0 !important;
+        width: 100%;
         box-sizing: border-box;
         padding-top: 0 !important;
         border-top: none !important;
     }
 
-    #alpha-keyboard-view #keyboard { 
-        grid-template-columns: repeat(4, 1fr); 
+    #alpha-keyboard-view #keyboard {
+        grid-template-columns: repeat(4, 1fr);
     }
 
-    #number-keyboard { 
-         grid-template-columns: repeat(3, 1fr); 
+    #number-keyboard {
+         grid-template-columns: repeat(3, 1fr);
     }
     #concepts-keyboard, #questions-keyboard {
-        grid-template-columns: repeat(4, 1fr); 
+        grid-template-columns: repeat(4, 1fr);
     }
 
     .sign-button {
-        background-color: #FFFFFF; 
-        border: 4px solid transparent; 
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-        border-radius: 15px; 
+        background-color: #FFFFFF;
+        border: 4px solid transparent;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 15px;
         cursor: pointer;
         transition: all 0.2s ease;
         box-sizing: border-box;
-        display: flex; 
+        display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         padding: 5px;
-        
+       
         border-image-slice: 1;
         border-image-source: linear-gradient(
-            to right, 
+            to right,
             var(--cute-yellow),  
             var(--cute-pink),    
             var(--cute-teal),    
-            var(--cute-orange)   
+            var(--cute-orange)  
         );
     }
-    
+   
     .sign-button:hover {
-        transform: scale(1.05); 
+        transform: scale(1.05);
         box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
     }
-    
+   
     .sign-button span {
         font-family: 'Baloo 2', sans-serif;
         font-weight: 700;
     }
 
     .sign-button img {
-         max-width: 50px; 
-         max-height: 60px; 
-         width: auto; 
+         max-width: 50px;
+         max-height: 60px;
+         width: auto;
          object-fit: contain;
     }
 
     .number-button {
         background-color: var(--num-pastel) !important;
         color: white;
-        font-weight: 700; 
-        border: 4px solid transparent; 
+        font-weight: 700;
+        border: 4px solid transparent;
     }
-    
+   
     .concept-button {
         background-color: var(--concept-color);
         color: white;
         font-weight: 700;
-        border: 4px solid transparent; 
+        border: 4px solid transparent;
     }
-    
+   
     .number-button .sign-image, .concept-button .sign-image {
-         filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 5px rgba(0, 0, 0, 0.2)); 
+         filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 5px rgba(0, 0, 0, 0.2));
     }
 
 
     @media (min-width: 800px) {
-        
+       
         .container {
-            max-width: 700px; 
+            max-width: 700px;
             width: 100%;
         }
-        
+       
         #main-interaction, #text-area-group, .logo-section, .function-buttons, .mode-status {
              width: 100% !important;
-             order: initial !important; 
-             margin-top: initial !important; 
+             order: initial !important;
+             margin-top: initial !important;
         }
-        
+       
         #main-interaction {
-             margin-top: 15px; 
+             margin-top: 15px;
         }
-        
+       
         .container:not(.text-mode-active) #extra-controls-panel {
-             display: none !important; 
+             display: none !important;
         }
 
         .container:not(.text-mode-active) #category-selector-panel {
-             display: flex !important; 
+             display: flex !important;
              justify-content: center;
-             border-bottom: none !important; 
-             margin-bottom: 5px; 
+             border-bottom: none !important;
+             margin-bottom: 5px;
         }
-        
-        #alpha-keyboard-view #keyboard { 
-             grid-template-columns: repeat(6, 1fr); 
+       
+        #alpha-keyboard-view #keyboard {
+             grid-template-columns: repeat(6, 1fr);
         }
 
         #number-keyboard {
-             grid-template-columns: repeat(4, 1fr); 
+             grid-template-columns: repeat(4, 1fr);
         }
-        
+       
          #concepts-keyboard, #questions-keyboard {
-            grid-template-columns: repeat(6, 1fr); 
+            grid-template-columns: repeat(6, 1fr);
         }
-        
+       
          .extra-keyboard-view {
-            position: absolute; 
-            top: 55px; 
+            position: absolute;
+            top: 55px;
             left: 0;
-            width: 100%; 
+            width: 100%;
         }
 
         .container:not(.text-mode-active) #text-input-area {
@@ -524,50 +524,50 @@
         .text-mode-active.container {
              padding: 15px;
         }
-        
+       
         .text-mode-active #main-interaction {
             display: none;
         }
 
         .text-mode-active #text-area-group {
-            display: flex; 
-            flex-direction: column; 
-            gap: 0; 
+            display: flex;
+            flex-direction: column;
+            gap: 0;
         }
 
         .text-mode-active #output-area {
-            min-height: 180px; 
-            margin-bottom: 0px; 
+            min-height: 180px;
+            margin-bottom: 0px;
             flex-grow: 1;
         }
-        
+       
         .text-mode-active #text-input-area {
             min-height: 120px;
-            margin-top: 10px; 
-            margin-bottom: 0px; 
+            margin-top: 10px;
+            margin-bottom: 0px;
             display: block !important;
         }
     }
 
     .modal {
-        display: none; 
-        position: fixed; 
-        z-index: 200; 
+        display: none;
+        position: fixed;
+        z-index: 200;
         left: 0;
         top: 0;
-        width: 100%; 
-        height: 100%; 
-        overflow: auto; 
-        background-color: rgba(0, 0, 0, 0.4); 
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
     }
 
     .modal-content {
         background-color: var(--card-bg-color);
-        margin: 10% auto; 
+        margin: 10% auto;
         padding: 25px;
         border-radius: 20px;
-        width: 80%; 
-        max-width: 400px; 
+        width: 80%;
+        max-width: 400px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         position: relative;
         color: var(--text-color);
@@ -607,7 +607,7 @@
         font-weight: 600;
         cursor: pointer;
         transition: background-color 0.2s, transform 0.2s;
-        box-shadow: 0 3px 0px rgba(0, 0, 0, 0.2); 
+        box-shadow: 0 3px 0px rgba(0, 0, 0, 0.2);
     }
 
     .config-option:hover {
@@ -644,7 +644,7 @@
         <div class="logo-section">
             <img src="https://alex-moonie.github.io/ManiManita-Fotos/logo.png" alt="Logo Mani_Manita">
             <h1>Traductor LDS</h1><br>
-        
+       
             <button class="config-button" id="open-config-modal">⚙️</button>
         </div>
 
@@ -679,7 +679,7 @@
             </div>
 
             <div class="keyboard-wrapper">
-                
+               
                 <div class="keyboard-view" id="alpha-keyboard-view">
                     <div class="keyboard-grid" id="keyboard">
                         <button class="sign-button" data-letter="A"><img class="sign-image" src="https://alex-moonie.github.io/ManiManita-Fotos/LetraA.jpg.png" alt="Seña A"><span>A</span></button>
@@ -713,7 +713,7 @@
                         <button class="sign-button" data-letter="Z"><img class="sign-image" src="https://alex-moonie.github.io/ManiManita-Fotos/LetraZ.jpg.png" alt="Seña Z"><span>Z</span></button>
                     </div>
                 </div>
-                
+               
                 <div id="number-keyboard-view" class="keyboard-view extra-keyboard-view">
                     <div id="number-keyboard" class="keyboard-grid">
                         <button class="sign-button number-button" data-letter="CERO"><img class="sign-image" src="https://alex-moonie.github.io/ManiManita-Fotos/0.png" alt="Seña 0"><span>0</span></button>
@@ -729,7 +729,7 @@
                         <button class="sign-button number-button" data-letter="DIEZ"><img class="sign-image" src="https://alex-moonie.github.io/ManiManita-Fotos/10.png" alt="Seña 10"><span>10</span></button>
                     </div>
                 </div>
-                
+               
                 <div id="concepts-keyboard-view" class="keyboard-view extra-keyboard-view">
                     <div id="concepts-keyboard" class="keyboard-grid">
                         <button class="sign-button concept-button" data-letter="HOLA"><img class="sign-image" src="https://alex-moonie.github.io/ManiManita-Fotos/hola.png" alt="Seña HOLA"><span>HOLA</span></button>
@@ -745,7 +745,7 @@
                         <button class="sign-button concept-button" data-letter="MAL"><img class="sign-image" src="https://alex-moonie.github.io/ManiManita-Fotos/MAL.png" alt="Seña MAL"><span>MAL</span></button>
                     </div>
                 </div>
-                
+               
                 <div id="questions-keyboard-view" class="keyboard-view extra-keyboard-view">
                     <div id="questions-keyboard" class="keyboard-grid">
                          <button class="sign-button concept-button" data-letter="¿QUIÉN?"><img class="sign-image" src="https://alex-moonie.github.io/ManiManita-Fotos/QUIEN.png" alt="Seña ¿QUIÉN?"><span>¿QUIÉN?</span></button>
@@ -758,33 +758,33 @@
 
             </div>
 
-        </div> 
-    </div> 
-    
+        </div>
+    </div>
+   
     <div id="config-modal" class="modal">
         <div class="modal-content">
             <span class="close-button" id="close-config-modal">&times;</span>
             <h3>Opciones de Configuración</h3>
-            
+           
             <button class="config-option" id="config-dark-mode-button">Cambiar a Modo Oscuro 🌙</button>
-            
+           
             <button class="config-option" id="config-qr-button">Opciones de QR / Chat 🤝</button>
 
             <button class="config-option" id="config-copy-button">Copiar Texto Generado 📋</button>
-            
+           
             <button class="config-option" id="config-clear-button">Limpiar Área de Salida 🗑️</button>
-            
+           
             <button class="config-option" id="config-info-button">Más información sobre Mani_Manita 💖</button>
-            
+           
             <p style="margin-top: 20px; font-size: 0.9em; color: var(--light-text-color);">Hecho con 💖 para LSA - v1.2</p>
         </div>
     </div>
-    
+   
     <div id="qr-modal" class="modal">
         <div class="modal-content">
             <span class="close-button" id="close-qr-modal">&times;</span>
             <h3>Mensajes QR</h3>
-            
+           
             <p style="font-weight: bold; color: var(--cute-teal);">Generar Mensaje Escaneable (Texto de Salida)</p>
             <p style="font-size: 0.9em; margin-bottom: 10px;">Genera un QR con el texto actual de la pantalla para una lectura rápida.</p>
             <button class="config-option" id="generate-message-qr-button">Generar QR de Mensaje</button>
@@ -792,30 +792,29 @@
         </div>
     </div>
 
-
-     <script>
+<script>
     const alphaKeyboardView = document.getElementById('alpha-keyboard-view');
     const conceptsKeyboardView = document.getElementById('concepts-keyboard-view');
     const questionsKeyboardView = document.getElementById('questions-keyboard-view');
     const numberKeyboardView = document.getElementById('number-keyboard-view');
-    
+
     const extraControlsPanel = document.getElementById('extra-controls-panel');
     const toggleExtrasButton = document.getElementById('toggle-extras-button');
     const categorySelectorPanel = document.getElementById('category-selector-panel');
     const categoryButtons = document.querySelectorAll('#category-selector-panel .category-button');
-    
-    const numModeButton = document.getElementById('num-mode-button'); 
+
+    const numModeButton = document.getElementById('num-mode-button');
     const spaceButton = document.getElementById('space-button');
     const deleteButton = document.getElementById('delete-button');
-    const clearAllButton = document.getElementById('clear-all-button'); 
+    const clearAllButton = document.getElementById('clear-all-button');
     const modeSwitchButton = document.getElementById('mode-switch-button');
 
     const outputArea = document.getElementById('output-area');
     const textInputArea = document.getElementById('text-input-area');
-    const modeStatusDiv = document.getElementById('mode-status-text'); 
+    const modeStatusDiv = document.getElementById('mode-status-text');
     const mainContainer = document.getElementById('main-container');
-    const body = document.body; 
-    
+    const body = document.body;
+
     const configButton = document.getElementById('open-config-modal');
     const configModal = document.getElementById('config-modal');
     const closeModalButton = document.getElementById('close-config-modal');
@@ -823,151 +822,217 @@
     const configClearButton = document.getElementById('config-clear-button');
     const configDarkModeButton = document.getElementById('config-dark-mode-button');
     const configInfoButton = document.getElementById('config-info-button');
-    
+
     const qrModal = document.getElementById('qr-modal');
     const closeQrModalButton = document.getElementById('close-qr-modal');
     const generateMessageQrButton = document.getElementById('generate-message-qr-button');
     const messageQrCodeDiv = document.getElementById('message-qr-code');
-    const configQrButton = document.getElementById('config-qr-button'); 
-    
-    let currentMode = 'sign'; 
-    let currentActiveKeyboard = 'alpha'; 
-    let currentExtraKeyboard = null; 
-    let extraPanelOpen = false; 
-    
-        const SIGN_MAP = {
-            'A': 'LetraA.jpg', 'B': 'LetraB.jpg', 'C': 'LetraC.jpg', 'D': 'LetraD.jpg', 'E': 'LetraE.jpg', 
-            'F': 'LetraF.jpg', 'G': 'LetraG.jpg', 'H': 'LetraH.jpg', 'I': 'LetraI.jpg', 'J': 'LetraJ.jpg', 
-            'K': 'LetraK.jpg', 'L': 'LetraL.jpg', 'LL': 'LetraLL.jpg', 'M': 'LetraM.jpg', 'N': 'LetraN.jpg', 
-            'Ñ': 'LetraÑ.jpg', 'O': 'LetraO.jpg', 'P': 'LetraP.jpg', 'Q': 'LetraQ.jpg', 'R': 'LetraR.jpg', 
-            'RR': 'LetraRR.jpg', 'S': 'LetraS.jpg', 'T': 'LetraT.jpg', 'U': 'LetraU.jpg', 'V': 'LetraV.jpg', 
-            'W': 'LetraW.jpg', 'X': 'LetraX.jpg', 'Y': 'LetraY.jpg', 'Z': 'LetraZ.jpg',
-            
-            'CERO': '0', 'UNO': '1', 'DOS': '2', 'TRES': '3', 'CUATRO': '4',
-            'CINCO': '5', 'SEIS': '6', 'SIETE': '7', 'OCHO': '8', 'NUEVE': '9', 'DIEZ': '10',
-            
-            'HOLA': 'hola', 'GRACIAS': 'gracias', 'AYUDA': 'ayuda', 'NOMBRE': 'nombre', 
-            'COMER': 'comer', 'BEBER': 'beber', 'BAÑO': 'baño', 'ESPERA': 'esperar',
-            '¿CÓMO?': 'como', 'BIEN': 'bien', 'MAL': 'mal',
-            '¿QUIÉN?': 'quien', '¿QUÉ?': 'que', '¿CUÁNDO?': 'cuando', '¿DÓNDE?': 'donde', '¿POR QUÉ?': 'porque'
-        };
+    const configQrButton = document.getElementById('config-qr-button');
+
+    let currentMode = 'sign';
+    let currentActiveKeyboard = 'alpha';
+    let currentExtraKeyboard = null;
+    let extraPanelOpen = false;
+
+    // Asegúrate que esta URL coincida con la de tu visualizador.html
+    const BASE_VISUALIZER_PATH = "https://alex-moonie.github.io/Mani_Manita_Pagina/visualizador.html";
+    const GITHUB_PAGES_URL = 'https://alex-moonie.github.io/ManiManita-Fotos/';
+
+    const SIGN_MAP = {
+        'A': 'LetraA', 'B': 'LetraB', 'C': 'LetraC', 'D': 'LetraD', 'E': 'LetraE',
+        'F': 'LetraF', 'G': 'LetraG', 'H': 'LetraH', 'I': 'LetraI', 'J': 'LetraJ',
+        'K': 'LetraK', 'L': 'LetraL', 'LL': 'LetraLL', 'M': 'LetraM', 'N': 'LetraN',
+        'Ñ': 'LetraÑ', 'O': 'LetraO', 'P': 'LetraP', 'Q': 'LetraQ', 'R': 'LetraR',
+        'RR': 'LetraRR', 'S': 'LetraS', 'T': 'LetraT', 'U': 'LetraU', 'V': 'LetraV',
+        'W': 'LetraW', 'X': 'LetraX', 'Y': 'LetraY', 'Z': 'LetraZ',
+
+        'CERO': '0', 'UNO': '1', 'DOS': '2', 'TRES': '3', 'CUATRO': '4',
+        'CINCO': '5', 'SEIS': '6', 'SIETE': '7', 'OCHO': '8', 'NUEVE': '9', 'DIEZ': '10',
         
-        const GITHUB_PAGES_URL = 'https://alex-moonie.github.io/ManiManita-Fotos/';
+        '0': '0', '1': '1', '2': '2', '3': '3', '4': '4', '5': '5',
+        '6': '6', '7': '7', '8': '8', '9': '9',
+        '10': '10', 
 
-        function appendLetter(letter, sourceButton = null) {
-            const img = document.createElement('img');
-            let imageSrc = '';
+        'HOLA': 'hola', 'AYUDA': 'ayuda', 'NOMBRE': 'nombre',
+        'COMER': 'comer', 'BEBER': 'beber', 'BAÑO': 'baño', 'ESPERA': 'esperar',
+        'GRACIAS': 'GRACIAS', 'BIEN': 'BIEN', 'MAL': 'MAL',
+
+        '¿CÓMO?': 'COMO',
+        '¿QUIÉN?': 'QUIEN',
+        '¿QUÉ?': 'QUE',
+        '¿CUÁNDO?': 'CUANDO',
+        '¿DÓNDE?': 'DONDE',
+        '¿POR QUÉ?': 'por que'
+    };
+
+
+    function normalizeTextForMatching(text) {
+        return text
+            .toUpperCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
+            .replace(/[¿?.,!]/g, '') 
+            .trim();
+    }
+
+    function appendLetter(letter, sourceButton = null) {
+        const img = document.createElement('img');
+        let imageSrc = '';
+        let extension = '.png';
+
+        if (sourceButton) {
+            const signImage = sourceButton.querySelector('.sign-image');
+            imageSrc = signImage ? signImage.src : '';
+        }
+
+        if (!imageSrc) {
+            let fileName = SIGN_MAP[letter]; 
             
-            if (sourceButton) {
-                const signImage = sourceButton.querySelector('.sign-image');
-                imageSrc = signImage ? signImage.src : '';
-            } 
+            // Lógica para determinar extensión de archivo
+            if (letter.length === 1 || letter === 'LL' || letter === 'RR') {
+                extension = '.jpg';
+            } else if (['CERO', 'UNO', 'DOS', 'TRES', 'CUATRO', 'CINCO', 'SEIS', 'SIETE', 'OCHO', 'NUEVE', 'DIEZ', '10'].includes(letter)) {
+                 extension = '.png'; // Los números concepto/palabra son .png
+            } else if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(letter)) {
+                 extension = '.jpg'; // Los números dígito son .jpg
+            } else {
+                 extension = '.png'; // Default para conceptos
+            }
+
+            if (fileName) {
+                imageSrc = GITHUB_PAGES_URL + fileName + extension;
+            }
+        }
+
+        if (!imageSrc) return;
+
+        img.src = imageSrc;
+
+        const altText = {
+            'CERO': '0', 'UNO': '1', 'DOS': '2', 'TRES': '3', 'CUATRO': '4',
+            'CINCO': '5', 'SEIS': '6', 'SIETE': '7', 'OCHO': '8', 'NUEVE': '9', 'DIEZ': '10'
+        }[letter] || letter;
+
+        img.alt = `Seña ${altText}`;
+        img.classList.add('sign-output-image');
+        outputArea.appendChild(img);
+    }
+
+
+    function getOutputText() {
+        if (currentMode === 'text') {
+            return textInputArea.value;
+        }
+
+        const children = outputArea.children;
+        let text = '';
+        for (let i = 0; i < children.length; i++) {
+            const child = children[i];
+            if (child.classList.contains('sign-output-image')) {
+                const alt = child.alt;
+                if (alt.startsWith('Seña ')) {
+                    text += alt.substring(5) + ' ';
+                }
+            } else if (child.classList.contains('output-space')) {
+                text += ' ';
+            }
+        }
+        return text.trim();
+    }
+
+    function convertTextToSigns(text) {
+        outputArea.innerHTML = '';
+        if (!text) return;
+
+        const normalizedSignMap = {};
+        const allSignMapKeys = Object.keys(SIGN_MAP);
+        for (const key of allSignMapKeys) {
+            normalizedSignMap[normalizeTextForMatching(key)] = key; 
+        }
+        
+        const specialPhrases = {
+            'POR QUE': '¿POR QUÉ?' 
+        };
+
+        const rawWords = text.split(/\s+/).filter(word => word.length > 0);
+        const normalizedWords = rawWords.map(word => normalizeTextForMatching(word));
+
+        let i = 0;
+        while (i < rawWords.length) {
+            let matchedKey = null;
+            let matchedWordCount = 0;
+            const originalWord = rawWords[i]; 
+
+            for (const normalizedPhrase in specialPhrases) {
+                const phraseWords = normalizedPhrase.split(' ');
+                if (i + phraseWords.length <= normalizedWords.length) {
+                    const currentPhraseSlice = normalizedWords.slice(i, i + phraseWords.length).join(' ');
+                    if (currentPhraseSlice === normalizedPhrase) {
+                        matchedKey = specialPhrases[normalizedPhrase];
+                        matchedWordCount = phraseWords.length;
+                        break;
+                    }
+                }
+            }
             
-            if (!imageSrc) {
-                const fileName = SIGN_MAP[letter]; 
+            if (!matchedKey) {
+                const normalizedWord = normalizedWords[i];
                 
-                if (fileName) {
-                    let extension = '.png';
-                    if (fileName.includes('Letra')) {
-                        extension = '.png'; 
-                    }
-                    imageSrc = GITHUB_PAGES_URL + fileName + extension;
+                if (normalizedWord in normalizedSignMap) {
+                    matchedKey = normalizedSignMap[normalizedWord];
+                    matchedWordCount = 1;
+                }
+                
+                if (!matchedKey && originalWord in SIGN_MAP) {
+                    matchedKey = originalWord;
+                    matchedWordCount = 1;
                 }
             }
-            
-            if (!imageSrc) return; 
 
-            img.src = imageSrc;
-            
-            const altText = {
-                 'CERO': '0', 'UNO': '1', 'DOS': '2', 'TRES': '3', 'CUATRO': '4',
-                 'CINCO': '5', 'SEIS': '6', 'SIETE': '7', 'OCHO': '8', 'NUEVE': '9', 'DIEZ': '10'
-            }[letter] || letter;
+            if (matchedKey) {
+                appendLetter(matchedKey);
+                i += matchedWordCount;
+            } else {
+                const wordForFingerspelling = originalWord.toUpperCase().replace(/[¿?.,!]/g, ''); 
 
-            img.alt = `Seña ${altText}`;
-            img.classList.add('sign-output-image');
-            outputArea.appendChild(img);
-        }
+                for (let j = 0; j < wordForFingerspelling.length; j++) {
+                    let char = wordForFingerspelling[j];
+                    let key = '';
 
-        function getOutputText() {
-            const children = outputArea.children;
-            let text = '';
-            for (let i = 0; i < children.length; i++) {
-                const child = children[i];
-                if (child.classList.contains('sign-output-image')) {
-                    const alt = child.alt;
-                    if (alt.startsWith('Seña ')) {
-                        text += alt.substring(5) + ' '; 
+                    const twoChars = wordForFingerspelling.substring(j, j + 2);
+                    if (allSignMapKeys.includes(twoChars) && (twoChars === 'LL' || twoChars === 'RR')) {
+                        key = twoChars;
+                        j++;
+                    } else if (allSignMapKeys.includes(char)) {
+                        key = char;
                     }
-                } else if (child.classList.contains('output-space')) {
-                    text += ' ';
+
+                    if (key) {
+                        appendLetter(key);
+                    }
                 }
+                i++;
             }
-            return text.trim(); 
+
+            if (i < rawWords.length) {
+                const spaceDiv = document.createElement('div');
+                spaceDiv.classList.add('output-space');
+                outputArea.appendChild(spaceDiv);
+            }
         }
-
-        function convertTextToSigns(text) {
-             outputArea.innerHTML = ''; 
-             if (!text) return;
-
-             const upperText = text.toUpperCase();
-             const words = upperText.split(/\s+/).filter(word => word.length > 0); 
-             
-             const conceptKeys = Object.keys(SIGN_MAP).filter(k => k.length > 2 && !k.match(/^[A-ZÑ]{1,2}$/)); 
-             const allKeys = Object.keys(SIGN_MAP);
-
-             words.forEach((word, index) => {
-                 let bestMatch = null;
-                 let matchedKey = '';
-
-                 const cleanWord = word.replace(/[¿?.,!]/g, '');
-                 
-                 if (conceptKeys.includes(cleanWord)) {
-                     bestMatch = SIGN_MAP[cleanWord];
-                     matchedKey = cleanWord;
-                 } 
-                 
-                 if (bestMatch) {
-                      appendLetter(matchedKey);
-                 } else {
-                      for (let i = 0; i < word.length; i++) {
-                          let char = word[i];
-                          let key = '';
-                          
-                          const twoChars = word.substring(i, i + 2);
-                          if (allKeys.includes(twoChars)) {
-                              key = twoChars;
-                              i++;
-                          } else if (allKeys.includes(char)) {
-                              key = char;
-                          }
-                          
-                          if (key) {
-                              appendLetter(key);
-                          }
-                      }
-                 }
-                 
-                 if (index < words.length - 1) {
-                     const spaceDiv = document.createElement('div');
-                     spaceDiv.classList.add('output-space');
-                     outputArea.appendChild(spaceDiv);
-                 }
-             });
-        }
+    }
 
     function handleCopyFromModal() {
-        const textToCopy = getOutputText(); 
-        
+        const textToCopy = getOutputText();
+
         if (!textToCopy) {
             alert("No hay mensaje para copiar.");
             return;
         }
         navigator.clipboard.writeText(textToCopy).then(() => {
             configCopyButton.textContent = '¡COPIADO! ✅';
-            setTimeout(() => { 
-                configCopyButton.textContent = 'Copiar Texto Generado 📋'; 
-                toggleModal(false); 
+            setTimeout(() => {
+                configCopyButton.textContent = 'Copiar Texto Generado 📋';
+                toggleModal(false);
             }, 1500);
         }).catch(err => {
             console.error('Error al copiar: ', err);
@@ -979,17 +1044,17 @@
     function handleClearAll() {
         outputArea.innerHTML = '';
         textInputArea.value = '';
-        
+
         if (this === configClearButton) {
-             configClearButton.textContent = '¡LIMPIADO! 🧼';
-             setTimeout(() => { 
-                configClearButton.textContent = 'Limpiar Área de Salida 🗑️'; 
-                toggleModal(false); 
+            configClearButton.textContent = '¡LIMPIADO! 🧼';
+            setTimeout(() => {
+                configClearButton.textContent = 'Limpiar Área de Salida 🗑️';
+                toggleModal(false);
             }, 1000);
         } else {
-             if (currentMode === 'text') {
+            if (currentMode === 'text') {
                 convertTextToSigns(textInputArea.value);
-             }
+            }
         }
     }
 
@@ -1001,7 +1066,7 @@
         body.classList.toggle('dark-mode');
         const isDarkMode = body.classList.contains('dark-mode');
         localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
-        
+
         configDarkModeButton.textContent = isDarkMode ? 'Cambiar a Modo Claro ☀️' : 'Cambiar a Modo Oscuro 🌙';
         configButton.style.color = isDarkMode ? 'var(--dark-text-color)' : 'var(--concept-color)';
     }
@@ -1018,22 +1083,22 @@
 
         const views = {
             'alpha': alphaKeyboardView,
-            'numbers': numberKeyboardView, 
+            'numbers': numberKeyboardView,
         };
-        
+
         const oldView = views[currentActiveKeyboard];
         if (oldView) oldView.style.display = 'none';
-        
+
         if (viewName in views) {
             views[viewName].style.display = 'block';
             currentActiveKeyboard = viewName;
         }
-        
+
         categoryButtons.forEach(btn => {
-             btn.classList.remove('active');
-             if (btn.getAttribute('data-view') === viewName) {
-                 btn.classList.add('active');
-             }
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-view') === viewName) {
+                btn.classList.add('active');
+            }
         });
     }
 
@@ -1042,7 +1107,7 @@
             'concepts': conceptsKeyboardView,
             'questions': questionsKeyboardView
         };
-        
+
         if (currentExtraKeyboard && extraViews[currentExtraKeyboard]) {
             extraViews[currentExtraKeyboard].style.display = 'none';
         }
@@ -1056,36 +1121,36 @@
             }
         }
     }
-    
+
     function toggleExtrasPanel(forceState = null) {
         const isDesktop = window.innerWidth >= 800;
-        
+
         if (isDesktop) {
-             categorySelectorPanel.style.display = 'flex';
-             document.querySelector('.category-button[data-view="alpha"]').style.display = 'inline-block';
-             document.querySelector('.category-button[data-view="concepts"]').style.display = 'inline-block';
-             document.querySelector('.category-button[data-view="questions"]').style.display = 'inline-block';
-             return;
+            categorySelectorPanel.style.display = 'flex';
+            document.querySelector('.category-button[data-view="alpha"]').style.display = 'inline-block';
+            document.querySelector('.category-button[data-view="concepts"]').style.display = 'inline-block';
+            document.querySelector('.category-button[data-view="questions"]').style.display = 'inline-block';
+            return;
         }
-        
+
         extraPanelOpen = (forceState !== null) ? forceState : !extraPanelOpen;
-        
+
         document.querySelector('.category-button[data-view="alpha"]').style.display = 'none';
-        
+
         if (extraPanelOpen) {
-             categorySelectorPanel.style.display = 'flex';
-             toggleExtrasButton.textContent = '➖';
-             
-             document.querySelector('.category-button[data-view="concepts"]').style.display = 'inline-block';
-             document.querySelector('.category-button[data-view="questions"]').style.display = 'inline-block';
+            categorySelectorPanel.style.display = 'flex';
+            toggleExtrasButton.textContent = '➖';
+
+            document.querySelector('.category-button[data-view="concepts"]').style.display = 'inline-block';
+            document.querySelector('.category-button[data-view="questions"]').style.display = 'inline-block';
 
         } else {
-             categorySelectorPanel.style.display = 'none';
-             toggleExtrasButton.textContent = '➕';
-             
-             if (currentExtraKeyboard) {
-                 toggleExtraKeyboardView(currentExtraKeyboard);
-             }
+            categorySelectorPanel.style.display = 'none';
+            toggleExtrasButton.textContent = '➕';
+
+            if (currentExtraKeyboard) {
+                toggleExtraKeyboardView(currentExtraKeyboard);
+            }
         }
     }
 
@@ -1093,7 +1158,7 @@
         sign: {
             buttonText: 'Cambiar a Modo Texto ✍️',
             modeStatusText: 'Estás usando Modo: SEÑAS 🤟',
-            mainInteractionDisplay: 'block', 
+            mainInteractionDisplay: 'block',
             textInputDisplay: 'none',
             isTextMode: false,
         },
@@ -1108,43 +1173,43 @@
 
     function applyMode(mode) {
         const config = modeConfig[mode];
-        currentMode = mode; 
+        currentMode = mode;
 
         const mainInteraction = document.getElementById('main-interaction');
         if (mainInteraction) {
-             mainInteraction.style.display = config.mainInteractionDisplay;
+            mainInteraction.style.display = config.mainInteractionDisplay;
         }
-        textInputArea.style.display = config.textInputDisplay; 
-        
+        textInputArea.style.display = config.textInputDisplay;
+
         if (config.isTextMode) {
-             mainContainer.classList.add('text-mode-active'); 
+            mainContainer.classList.add('text-mode-active');
         } else {
-             mainContainer.classList.remove('text-mode-active');
-             if (textInputArea.value !== '') {
-                textInputArea.value = ''; 
-             }
-             switchBaseKeyboardView('alpha'); 
+            mainContainer.classList.remove('text-mode-active');
+            if (textInputArea.value !== '') {
+                textInputArea.value = '';
+            }
+            switchBaseKeyboardView('alpha');
         }
-        
+
         numModeButton.style.display = (mode === 'sign') ? 'flex' : 'none';
         spaceButton.style.display = (mode === 'sign') ? 'flex' : 'none';
 
         toggleExtrasPanel(mode === 'sign' ? (window.innerWidth >= 800 ? true : false) : false);
-        
+
         modeSwitchButton.textContent = config.buttonText;
         modeStatusDiv.textContent = config.modeStatusText;
-        
+
         if (mode === 'text') {
-             convertTextToSigns(textInputArea.value);
+            convertTextToSigns(textInputArea.value);
         }
     }
-    
+
     function generateQrCode(elementId, text, size = 200) {
         const element = document.getElementById(elementId);
         if (!element) return;
-        
+
         element.innerHTML = '';
-        
+
         if (text) {
             new QRCode(element, {
                 text: text,
@@ -1166,38 +1231,38 @@
             if (button) {
                 const letter = button.getAttribute('data-letter');
                 if (letter) {
-                    appendLetter(letter, button); 
+                    appendLetter(letter, button);
                 }
             }
         }
     });
 
     toggleExtrasButton.addEventListener('click', () => {
-         toggleExtrasPanel();
+        toggleExtrasPanel();
     });
 
     categoryButtons.forEach(button => {
         button.addEventListener('click', (event) => {
-             const view = event.currentTarget.getAttribute('data-view');
-             
-             if (view === 'alpha' || view === 'numbers') { 
-                 switchBaseKeyboardView(view);
-                 if (currentExtraKeyboard) toggleExtraKeyboardView(currentExtraKeyboard);
-                 
-             } else {
-                 toggleExtraKeyboardView(view);
-             }
+            const view = event.currentTarget.getAttribute('data-view');
+
+            if (view === 'alpha' || view === 'numbers') {
+                switchBaseKeyboardView(view);
+                if (currentExtraKeyboard) toggleExtraKeyboardView(currentExtraKeyboard);
+
+            } else {
+                toggleExtraKeyboardView(view);
+            }
         });
     });
 
     numModeButton.addEventListener('click', () => {
-         if (currentMode === 'sign') {
-             const newView = (currentActiveKeyboard === 'alpha') ? 'numbers' : 'alpha'; 
-             switchBaseKeyboardView(newView);
-             if (currentExtraKeyboard) toggleExtraKeyboardView(currentExtraKeyboard);
-         }
+        if (currentMode === 'sign') {
+            const newView = (currentActiveKeyboard === 'alpha') ? 'numbers' : 'alpha';
+            switchBaseKeyboardView(newView);
+            if (currentExtraKeyboard) toggleExtraKeyboardView(currentExtraKeyboard);
+        }
     });
-    
+
     spaceButton.addEventListener('click', () => {
         if (currentMode === 'sign') {
             const spaceDiv = document.createElement('div');
@@ -1230,7 +1295,7 @@
             convertTextToSigns(event.target.value);
         }
     });
-    
+
     configButton.addEventListener('click', () => {
         toggleModal(true);
     });
@@ -1249,20 +1314,19 @@
     configClearButton.addEventListener('click', handleClearAll);
     configDarkModeButton.addEventListener('click', toggleDarkMode);
     configInfoButton.addEventListener('click', showInfo);
-    
+
     configQrButton.addEventListener('click', () => {
-        configModal.style.display = 'none'; 
-        qrModal.style.display = 'block'; 
+        configModal.style.display = 'none';
+        qrModal.style.display = 'block';
     });
 
     closeQrModalButton.addEventListener('click', () => {
         qrModal.style.display = 'none';
     });
-    
-    const BASE_VISUALIZER_PATH = "https://alex-moonie.github.io/Mani_Manita_Pagina/visualizador.html";
 
     generateMessageQrButton.addEventListener('click', () => {
-        const textToEncode = getOutputText(); 
+        // Obtenemos el texto del output o del input
+        let textToEncode = getOutputText(); 
         const qrCodeDiv = document.getElementById('message-qr-code');
 
         if (textToEncode.trim() === '') {
@@ -1270,37 +1334,58 @@
             qrCodeDiv.style.display = 'block';
             return;
         }
-        
+
+        // *** MODIFICACIÓN CLAVE: Forzamos el texto a mayúsculas ANTES de codificar ***
+        // Esto garantiza que el visualizador.html reciba el formato que espera el SIGN_MAP.
+        textToEncode = textToEncode.toUpperCase(); 
+
         const mensajeCodificado = encodeURIComponent(textToEncode);
         const finalUrl = BASE_VISUALIZER_PATH + "?m=" + mensajeCodificado;
 
         generateQrCode('message-qr-code', finalUrl, 200);
-        
+
         configModal.style.display = 'none';
     });
 
     const savedDarkMode = localStorage.getItem('darkMode');
-    
+
     if (savedDarkMode === 'enabled') {
         body.classList.add('dark-mode');
         configDarkModeButton.textContent = 'Cambiar a Modo Claro ☀️';
-        configButton.style.color = 'var(--dark-text-color)'; 
+        configButton.style.color = 'var(--dark-text-color)';
     } else {
-        body.classList.remove('dark-mode'); 
+        body.classList.remove('dark-mode');
         configDarkModeButton.textContent = 'Cambiar a Modo Oscuro 🌙';
-        configButton.style.color = 'var(--concept-color)'; 
-        
+        configButton.style.color = 'var(--concept-color)';
+
         if (!savedDarkMode || savedDarkMode !== 'disabled') {
-             localStorage.setItem('darkMode', 'disabled');
+            localStorage.setItem('darkMode', 'disabled');
         }
     }
     
+    // Esta función ya no es necesaria en index.html si el QR apunta a visualizador.html
+    // Si la dejamos, solo se usa para limpiar la URL si el usuario accede con un ?m=
+    function readUrlMessage() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const message = urlParams.get('m');
+
+        if (message) {
+            // Limpiar la URL para que no recargue el mensaje si el usuario refresca
+            if (window.history.replaceState) {
+                const cleanUrl = window.location.href.split('?')[0];
+                window.history.replaceState(null, null, cleanUrl);
+            }
+        }
+    }
+
     applyMode('sign');
-    
-    switchBaseKeyboardView('alpha'); 
-    
-    toggleExtrasPanel(window.innerWidth >= 800 ? true : false); 
-    
+
+    switchBaseKeyboardView('alpha');
+
+    toggleExtrasPanel(window.innerWidth >= 800 ? true : false);
+
+    readUrlMessage();
 </script>
+
 </body>
 </html>
