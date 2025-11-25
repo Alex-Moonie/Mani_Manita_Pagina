@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -169,20 +169,26 @@
             let fileName = SIGN_MAP[letter]; 
             let extension = '.png';
             
-            if (letter.length === 1 || letter === 'LL' || letter === 'RR' || (letter.length <= 3 && !isNaN(parseInt(letter)) && letter !== '10')) {
-                extension = '.jpg';
-            } else if (['CERO', 'UNO', 'DOS', 'TRES', 'CUATRO', 'CINCO', 'SEIS', 'SIETE', 'OCHO', 'NUEVE', 'DIEZ', '10'].includes(letter)) {
-                 extension = '.png'; 
-            } else if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(letter)) {
-                 extension = '.jpg'; 
-            } else {
-                 extension = '.png'; 
+            // Lógica de Extensión CORREGIDA para Números y Letras
+            if (letter.length === 1 && /[A-ZÑ]/.test(letter) || letter === 'LL' || letter === 'RR') {
+                extension = '.jpg'; // Letras (A, B, C, LL, RR) son .jpg
+            } 
+            else if (letter.length === 1 && /[0-9]/.test(letter)) {
+                extension = '.jpg'; // Dígitos numéricos (0, 1, 2... 9) son .jpg
+            }
+            else if (letter === '10') {
+                extension = '.jpg'; // El número 10 (dígito) es .jpg
+            }
+            else if (['CERO', 'UNO', 'DOS', 'TRES', 'CUATRO', 'CINCO', 'SEIS', 'SIETE', 'OCHO', 'NUEVE', 'DIEZ'].includes(letter)) {
+                 extension = '.png'; // Números escritos como palabra son .png
+            }
+            else {
+                 extension = '.png'; // Default para conceptos (HOLA, AYUDA, etc.) que son .png
             }
 
             let imageSrc = GITHUB_PAGES_URL + fileName + extension;
             
             img.onerror = function() {
-                // Dejamos un error simple en la consola para depuración futura, sin afectar el HTML.
                 console.error(`ERROR: No se encontró la imagen para ${letter} en la ruta: ${imageSrc}`);
             };
 
@@ -297,4 +303,3 @@
     </script>
 </body>
 </html>
-
