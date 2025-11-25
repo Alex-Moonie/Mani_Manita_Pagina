@@ -81,9 +81,10 @@
                 return;
             }
 
-            // Lógica Específica: Si el nombre del archivo empieza con 'Letra', la extensión DEBE ser .jpg
+            // Lógica Específica: Si el nombre del archivo empieza con 'Letra' (Dactilología),
+            // usa la extensión doble '.jpg.png' que has identificado en tu código.
             if (fileName.startsWith('Letra')) {
-                extension = '.jpg'; // <-- Fuerza las letras a buscarse como LetraA.jpg
+                extension = '.jpg.png'; 
             }
             // Si no empieza con 'Letra', se queda con la extensión por defecto: .png (para 1.png, hola.png, etc.)
             
