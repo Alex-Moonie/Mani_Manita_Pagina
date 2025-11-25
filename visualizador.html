@@ -44,12 +44,11 @@
             'RR': 'LetraRR', 'S': 'LetraS', 'T': 'LetraT', 'U': 'LetraU', 'V': 'LetraV',
             'W': 'LetraW', 'X': 'LetraX', 'Y': 'LetraY', 'Z': 'LetraZ',
 
-            // NÚMEROS CONCEPTO (si tus archivos son 0.png, 1.png, etc., y se activan al escribir "UNO")
-            // Ahora todos apuntan al dígito.
+            // NÚMEROS CONCEPTO (se mapean a los dígitos del archivo .png)
             'CERO': '0', 'UNO': '1', 'DOS': '2', 'TRES': '3', 'CUATRO': '4',
             'CINCO': '5', 'SEIS': '6', 'SIETE': '7', 'OCHO': '8', 'NUEVE': '9', 'DIEZ': '10',
             
-            // DÍGITOS NUMÉRICOS (para deletreo o cuando se escribe el dígito)
+            // DÍGITOS NUMÉRICOS (para deletreo)
             '0': '0', '1': '1', '2': '2', '3': '3', '4': '4', '5': '5',
             '6': '6', '7': '7', '8': '8', '9': '9',
             '10': '10', 
@@ -70,50 +69,28 @@
                 .trim();
         }
 
+        // FUNCIÓN CORREGIDA para manejar las extensiones de imagen
         function appendLetter(letter) {
             const outputArea = document.getElementById('output-area');
             const img = document.createElement('img');
             let fileName = SIGN_MAP[letter]; 
-            let extension = '.png';
-            
-            // --- Lógica de Extensión (Ajustada a tus nombres de archivo) ---
-            const isDigitOrLetter = letter.length === 1 || letter === '10' || letter === 'LL' || letter === 'RR';
+            let extension = '.png'; // Por defecto es .png (para conceptos y números)
 
-            if (isDigitOrLetter && /[A-ZÑ]/.test(letter)) {
-                extension = '.jpg'; // Letras (A, B, C, LL, RR)
-            } 
-            else if (isDigitOrLetter && /[0-9]/.test(letter.slice(-1))) {
-                // Si el valor mapeado es un dígito ('0', '1', '10'), debe ser .png para conceptos.
-                // Usaremos .png por default para los conceptos numéricos.
-                extension = '.png'; 
-            }
-            // Si quieres que los dígitos numéricos sean .jpg, usa esta lógica:
-            // else if (['0','1','2','3','4','5','6','7','8','9','10'].includes(letter)) {
-            // extension = '.jpg'; 
-            // }
-
-            // Si el nombre del archivo (fileName) es LetraA, debe ser .jpg
-            if (fileName && fileName.startsWith('Letra')) {
-                 extension = '.jpg';
-            }
-            // Si el nombre del archivo (fileName) es un dígito y viene de la palabra (UNO -> '1'), debe ser .png (concepto)
-            else if (['0','1','2','3','4','5','6','7','8','9','10'].includes(fileName) && ['CERO', 'UNO', 'DOS', 'TRES', 'CUATRO', 'CINCO', 'SEIS', 'SIETE', 'OCHO', 'NUEVE', 'DIEZ'].includes(letter)) {
-                 extension = '.png';
-            } 
-            // Si el nombre del archivo (fileName) es un dígito y viene de Dactilología (0 -> '0'), debe ser .jpg
-            else if (['0','1','2','3','4','5','6','7','8','9','10'].includes(fileName) && ['0','1','2','3','4','5','6','7','8','9','10'].includes(letter)) {
-                 extension = '.jpg';
-            }
-            // El resto son conceptos .png
-            else {
-                extension = '.png';
+            if (!fileName) {
+                console.error(`ERROR: No se encontró el mapeo para ${letter}`);
+                return;
             }
 
+            // Lógica: Las letras de Dactilología son .jpg. Todo lo demás es .png.
+            if (fileName.startsWith('Letra')) {
+                extension = '.jpg';
+            }
+            // Si es un número (0 a 10) o cualquier otro concepto (hola, BIEN, COMO), se queda como .png
 
             let imageSrc = GITHUB_PAGES_URL + fileName + extension;
             
             img.onerror = function() {
-                console.error(`ERROR: No se encontró la imagen para ${letter} en la ruta: ${imageSrc}. Nombre de archivo intentado: ${fileName}${extension}`);
+                console.error(`ERROR DE CARGA: No se encontró la imagen para ${letter}. URL intentada: ${imageSrc}.`);
             };
 
             img.src = imageSrc;
@@ -127,13 +104,14 @@
             outputArea.innerHTML = '';
             if (!text) return;
 
+            // Definiciones necesarias para el funcionamiento
             const normalizedSignMap = {};
             const allSignMapKeys = Object.keys(SIGN_MAP);
             for (const key of allSignMapKeys) {
                 normalizedSignMap[normalizeTextForMatching(key)] = key; 
             }
             
-            const specialPhrases = { 'POR QUE': '¿POR QUÉ?' };
+            const specialPhrases = { 'POR QUE': '¿POR QUÉ?' }; // Corrección del error ReferenceError
 
             const rawWords = text.split(/\s+/).filter(word => word.length > 0);
             const normalizedWords = rawWords.map(word => normalizeTextForMatching(word));
@@ -144,6 +122,7 @@
                 let matchedWordCount = 0;
                 const originalWord = rawWords[i]; 
 
+                // 1. Búsqueda de frases especiales (como 'POR QUE' -> '¿POR QUÉ?')
                 for (const normalizedPhrase in specialPhrases) {
                     const phraseWords = normalizedPhrase.split(' ');
                     if (i + phraseWords.length <= normalizedWords.length) {
@@ -156,6 +135,7 @@
                     }
                 }
                 
+                // 2. Búsqueda de conceptos o palabras completas
                 if (!matchedKey) {
                     const normalizedWord = normalizedWords[i];
                     
@@ -170,10 +150,12 @@
                     }
                 }
 
+                // 3. Renderizar imagen si se encontró un match
                 if (matchedKey) {
                     appendLetter(matchedKey);
                     i += matchedWordCount;
                 } else {
+                    // 4. Deletreo (Dactilología) si no hay match
                     const wordForFingerspelling = originalWord.toUpperCase().replace(/[¿?.,!]/g, ''); 
 
                     for (let j = 0; j < wordForFingerspelling.length; j++) {
@@ -181,6 +163,7 @@
                         let key = '';
 
                         const twoChars = wordForFingerspelling.substring(j, j + 2);
+                        // Prioriza LL y RR
                         if (allSignMapKeys.includes(twoChars) && (twoChars === 'LL' || twoChars === 'RR')) {
                             key = twoChars;
                             j++;
@@ -195,6 +178,7 @@
                     i++;
                 }
 
+                // Añadir espacio después de cada palabra (si no es la última)
                 if (i < rawWords.length) {
                     const spaceDiv = document.createElement('div');
                     spaceDiv.classList.add('output-space');
