@@ -69,24 +69,24 @@
                 .trim();
         }
 
-        // FUNCIÓN CORREGIDA para manejar las extensiones de imagen
+        // FUNCIÓN CORREGIDA FINAL para manejar las extensiones de imagen correctamente
         function appendLetter(letter) {
             const outputArea = document.getElementById('output-area');
             const img = document.createElement('img');
             let fileName = SIGN_MAP[letter]; 
-            let extension = '.png'; // Por defecto es .png (para conceptos y números)
+            let extension = '.png'; // Por defecto es .png (para números y conceptos)
 
             if (!fileName) {
                 console.error(`ERROR: No se encontró el mapeo para ${letter}`);
                 return;
             }
 
-            // Lógica: Las letras de Dactilología son .jpg. Todo lo demás es .png.
+            // Lógica Específica: Si el nombre del archivo empieza con 'Letra', la extensión DEBE ser .jpg
             if (fileName.startsWith('Letra')) {
-                extension = '.jpg';
+                extension = '.jpg'; // <-- Fuerza las letras a buscarse como LetraA.jpg
             }
-            // Si es un número (0 a 10) o cualquier otro concepto (hola, BIEN, COMO), se queda como .png
-
+            // Si no empieza con 'Letra', se queda con la extensión por defecto: .png (para 1.png, hola.png, etc.)
+            
             let imageSrc = GITHUB_PAGES_URL + fileName + extension;
             
             img.onerror = function() {
@@ -111,7 +111,7 @@
                 normalizedSignMap[normalizeTextForMatching(key)] = key; 
             }
             
-            const specialPhrases = { 'POR QUE': '¿POR QUÉ?' }; // Corrección del error ReferenceError
+            const specialPhrases = { 'POR QUE': '¿POR QUÉ?' };
 
             const rawWords = text.split(/\s+/).filter(word => word.length > 0);
             const normalizedWords = rawWords.map(word => normalizeTextForMatching(word));
