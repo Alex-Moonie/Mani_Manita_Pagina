@@ -834,17 +834,13 @@
     let currentExtraKeyboard = null;
     let extraPanelOpen = false;
 
-    // Asegúrate que esta URL coincida con la de tu visualizador.html
-    const BASE_VISUALIZER_PATH = "https://alex-moonie.github.io/Mani_Manita_Pagina/visualizador.html";
-    const GITHUB_PAGES_URL = 'https://alex-moonie.github.io/ManiManita-Fotos/';
-
     const SIGN_MAP = {
-        'A': 'LetraA', 'B': 'LetraB', 'C': 'LetraC', 'D': 'LetraD', 'E': 'LetraE',
-        'F': 'LetraF', 'G': 'LetraG', 'H': 'LetraH', 'I': 'LetraI', 'J': 'LetraJ',
-        'K': 'LetraK', 'L': 'LetraL', 'LL': 'LetraLL', 'M': 'LetraM', 'N': 'LetraN',
-        'Ñ': 'LetraÑ', 'O': 'LetraO', 'P': 'LetraP', 'Q': 'LetraQ', 'R': 'LetraR',
-        'RR': 'LetraRR', 'S': 'LetraS', 'T': 'LetraT', 'U': 'LetraU', 'V': 'LetraV',
-        'W': 'LetraW', 'X': 'LetraX', 'Y': 'LetraY', 'Z': 'LetraZ',
+        'A': 'LetraA.jpg', 'B': 'LetraB.jpg', 'C': 'LetraC.jpg', 'D': 'LetraD.jpg', 'E': 'LetraE.jpg',
+        'F': 'LetraF.jpg', 'G': 'LetraG.jpg', 'H': 'LetraH.jpg', 'I': 'LetraI.jpg', 'J': 'LetraJ.jpg',
+        'K': 'LetraK.jpg', 'L': 'LetraL.jpg', 'LL': 'LetraLL.jpg', 'M': 'LetraM.jpg', 'N': 'LetraN.jpg',
+        'Ñ': 'LetraÑ.jpg', 'O': 'LetraO.jpg', 'P': 'LetraP.jpg', 'Q': 'LetraQ.jpg', 'R': 'LetraR.jpg',
+        'RR': 'LetraRR.jpg', 'S': 'LetraS.jpg', 'T': 'LetraT.jpg', 'U': 'LetraU.jpg', 'V': 'LetraV.jpg',
+        'W': 'LetraW.jpg', 'X': 'LetraX.jpg', 'Y': 'LetraY.jpg', 'Z': 'LetraZ.jpg',
 
         'CERO': '0', 'UNO': '1', 'DOS': '2', 'TRES': '3', 'CUATRO': '4',
         'CINCO': '5', 'SEIS': '6', 'SIETE': '7', 'OCHO': '8', 'NUEVE': '9', 'DIEZ': '10',
@@ -865,6 +861,7 @@
         '¿POR QUÉ?': 'por que'
     };
 
+    const GITHUB_PAGES_URL = 'https://alex-moonie.github.io/ManiManita-Fotos/';
 
     function normalizeTextForMatching(text) {
         return text
@@ -877,7 +874,6 @@
     function appendLetter(letter, sourceButton = null) {
         const img = document.createElement('img');
         let imageSrc = '';
-        let extension = '.png';
 
         if (sourceButton) {
             const signImage = sourceButton.querySelector('.sign-image');
@@ -886,17 +882,7 @@
 
         if (!imageSrc) {
             let fileName = SIGN_MAP[letter]; 
-            
-            // Lógica para determinar extensión de archivo
-            if (letter.length === 1 || letter === 'LL' || letter === 'RR') {
-                extension = '.jpg';
-            } else if (['CERO', 'UNO', 'DOS', 'TRES', 'CUATRO', 'CINCO', 'SEIS', 'SIETE', 'OCHO', 'NUEVE', 'DIEZ', '10'].includes(letter)) {
-                 extension = '.png'; // Los números concepto/palabra son .png
-            } else if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(letter)) {
-                 extension = '.jpg'; // Los números dígito son .jpg
-            } else {
-                 extension = '.png'; // Default para conceptos
-            }
+            let extension = '.png';
 
             if (fileName) {
                 imageSrc = GITHUB_PAGES_URL + fileName + extension;
@@ -919,10 +905,6 @@
 
 
     function getOutputText() {
-        if (currentMode === 'text') {
-            return textInputArea.value;
-        }
-
         const children = outputArea.children;
         let text = '';
         for (let i = 0; i < children.length; i++) {
@@ -1324,9 +1306,10 @@
         qrModal.style.display = 'none';
     });
 
+    const BASE_VISUALIZER_PATH = "https://alex-moonie.github.io/Mani_Manita_Pagina/visualizador.html";
+
     generateMessageQrButton.addEventListener('click', () => {
-        // Obtenemos el texto del output o del input
-        let textToEncode = getOutputText(); 
+        const textToEncode = getOutputText();
         const qrCodeDiv = document.getElementById('message-qr-code');
 
         if (textToEncode.trim() === '') {
@@ -1334,10 +1317,6 @@
             qrCodeDiv.style.display = 'block';
             return;
         }
-
-        // *** MODIFICACIÓN CLAVE: Forzamos el texto a mayúsculas ANTES de codificar ***
-        // Esto garantiza que el visualizador.html reciba el formato que espera el SIGN_MAP.
-        textToEncode = textToEncode.toUpperCase(); 
 
         const mensajeCodificado = encodeURIComponent(textToEncode);
         const finalUrl = BASE_VISUALIZER_PATH + "?m=" + mensajeCodificado;
@@ -1362,21 +1341,6 @@
             localStorage.setItem('darkMode', 'disabled');
         }
     }
-    
-    // Esta función ya no es necesaria en index.html si el QR apunta a visualizador.html
-    // Si la dejamos, solo se usa para limpiar la URL si el usuario accede con un ?m=
-    function readUrlMessage() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const message = urlParams.get('m');
-
-        if (message) {
-            // Limpiar la URL para que no recargue el mensaje si el usuario refresca
-            if (window.history.replaceState) {
-                const cleanUrl = window.location.href.split('?')[0];
-                window.history.replaceState(null, null, cleanUrl);
-            }
-        }
-    }
 
     applyMode('sign');
 
@@ -1384,8 +1348,10 @@
 
     toggleExtrasPanel(window.innerWidth >= 800 ? true : false);
 
-    readUrlMessage();
 </script>
 
+
+  
+     
 </body>
 </html>
