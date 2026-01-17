@@ -73,12 +73,12 @@
     const loaderHTML = `
     <div id="pwa-loader">
         <div class="loader-layout">
-            <img src="1000130854.jpg" class="img-foco">
-            <img src="1000130852.jpg" class="img-mano">
+            <img src="foco.jpg" class="img-foco">
+            <img src="mano.jpg" class="img-mano">
             <div class="corazones-box">
-                <img src="1000130853.jpg" class="heart h1">
-                <img src="1000130853.jpg" class="heart h2">
-                <img src="1000130853.jpg" class="heart h3">
+                <img src="corazon.jpg" class="heart h1">
+                <img src="corazon.jpg" class="heart h2">
+                <img src="corazon.jpg" class="heart h3">
             </div>
             <div class="bar-container"><div class="bar-fill"></div></div>
         </div>
