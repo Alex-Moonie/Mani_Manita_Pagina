@@ -664,6 +664,10 @@
             <button id="delete-button">Borrar</button>
             <button id="clear-all-button">Limpiar Todo</button>
             <button id="mode-switch-button">Cambiar a Modo Texto</button>
+            <button id="listen-button" style="background-color: #9370DB !important; color: white !important;">
+    Escuchar 🔊
+</button>
+
             </div>
 
         <div id="main-interaction">
@@ -1348,6 +1352,44 @@
 
     toggleExtrasPanel(window.innerWidth >= 800 ? true : false);
 
+
+
+
+    // --- FUNCIÓN DE SALIDA DE VOZ ---
+
+// 1. Obtenemos la referencia al nuevo botón
+const listenButton = document.getElementById('listen-button');
+
+// 2. Creamos la función para hablar
+function speakCurrentMessage() {
+    let textToSpeak = "";
+
+    if (currentMode === 'sign') {
+        // Si estamos en modo señas, usamos tu función existente getOutputText()
+        textToSpeak = getOutputText();
+    } else {
+        // Si estamos en modo texto, leemos lo que hay en el textarea
+        textToSpeak = textInputArea.value;
+    }
+
+    if (textToSpeak.trim() !== "") {
+        // Configuración de la voz del navegador
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.lang = 'es-MX'; // Español de México
+        utterance.rate = 0.9;     // Un poquito más lento para que se entienda mejor
+        utterance.pitch = 1.1;    // Un tono ligeramente más agudo/amigable
+        
+        // ¡Ordenamos que hable!
+        window.speechSynthesis.speak(utterance);
+    } else {
+        alert("¡No hay nada que leer todavía! Intenta escribir algo primero. 😊");
+    }
+}
+
+// 3. Conectamos el botón con la función
+listenButton.addEventListener('click', speakCurrentMessage);
+
+ 
 </script>
 
 <script src="pantalla-carga.js"></script>
