@@ -248,7 +248,7 @@
         navigator.clipboard.writeText(t).then(() => alert("¡Texto copiado al portapapeles!"));
     };
 
-    // --- LÓGICA DE QR ACTUALIZADA PARA VISUALIZADOR.HTML ---
+    // --- LÓGICA DE QR MANTENIENDO EL ESTILO ORIGINAL ---
     document.getElementById('config-qr-button').onclick = () => {
         let texto = "";
         if (textInputArea.style.display === 'block') {
@@ -264,6 +264,7 @@
             return;
         }
 
+        // Link a tu visualizador
         const urlVisor = "https://alex-moonie.github.io/ManiManita-Fotos/visualizador.html"; 
         const urlFinal = `${urlVisor}?m=${encodeURIComponent(texto.trim())}`;
 
