@@ -3,286 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mani_Manita - Versión Oficial</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
-   
-<style>                            
-    :root {
-        --cute-pink: #FF69B4;      
-        --cute-orange: #FFA500;    
-        --cute-teal: #00CED1;      
-        --cute-yellow: #FFD700;    
-        --space-pastel: #A2D9CE;    
-        --num-pastel: #FFC9A3;      
-        --copy-pastel: #FFF59D;      
-        --clear-pastel: #FFC0CB;    
-        --delete-pastel: #F4A5B7;    
-        --primary-color: var(--cute-teal);      
-        --switch-mode-color: #9370DB;          
-        --bg-gradient: linear-gradient(135deg, #FFC0CB, #FFD7A8, #FFFACD, #B0E0E6, #98FB98, #E6E6FA, #FFC0CB);
-        --card-bg-color: #F7F7FF;    
-        --rainbow-border: linear-gradient(to right, var(--cute-yellow), var(--cute-pink), var(--cute-teal), var(--cute-orange));
-    }
-
-    .dark-mode {
-        background: linear-gradient(135deg, #2C3E50, #000000) !important;
-        color: #E0E0E0 !important;
-    }
-    .dark-mode .container { background-color: #1E1E1E !important; border: 1px solid #333; }
-    .dark-mode #output-area, .dark-mode #text-input-area { background-color: #2D2D2D !important; color: #E0E0E0 !important; border: 4px solid var(--cute-teal) !important; }
-    .dark-mode .sign-button { background-color: #2D2D2D !important; color: white; }
-
-    body { font-family: 'Poppins', sans-serif; margin: 0; background: var(--bg-gradient); background-size: 400% 400%; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 10px; }
-    .container { max-width: 900px; width: 100%; background-color: var(--card-bg-color); border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); padding: 20px 15px; box-sizing: border-box; }
-    
-    .logo-section { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed var(--cute-teal); padding-bottom: 10px; margin-bottom: 15px; }
-    .logo-section h1 { color: var(--cute-pink); font-size: 1.8em; margin: 0; }
-    .logo-section img { max-width: 55px; border-radius: 50%; border: 2px solid var(--cute-orange); }
-
-    #output-area { min-height: 120px; border: 4px solid var(--primary-color); border-radius: 15px; background: white; margin-bottom: 15px; display: flex; flex-wrap: wrap; padding: 12px; gap: 4px; align-content: flex-start; }
-    .sign-output-image { height: 45px; width: auto; }
-    .output-space { width: 12px; height: 45px; background-color: var(--cute-yellow); border-radius: 5px; }
-
-    #text-input-area { width: 100%; min-height: 100px; border: 4px solid var(--switch-mode-color); border-radius: 15px; padding: 12px; margin-bottom: 15px; display: none; box-sizing: border-box; font-family: inherit; font-size: 1em; }
-
-    .function-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
-    .function-buttons button { border: none; border-radius: 12px; height: 50px; font-weight: 700; cursor: pointer; flex-grow: 1; color: white; box-shadow: 0 4px 0px rgba(0,0,0,0.15); }
-    #num-mode-button { background: var(--num-pastel) !important; color: #333 !important; }
-    #space-button { background: var(--space-pastel) !important; color: #333 !important; }
-    #delete-button { background: var(--delete-pastel) !important; }
-    #clear-all-button { background: var(--clear-pastel) !important; color: #333 !important; }
-    #mode-switch-button { background: var(--switch-mode-color) !important; }
-    #listen-button { background: #9370DB !important; }
-
-    .keyboard-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    .sign-button { background: white; border: 4px solid transparent; border-radius: 15px; cursor: pointer; display: flex; flex-direction: column; align-items: center; padding: 8px 5px; border-image-slice: 1; border-image-source: var(--rainbow-border); transition: transform 0.1s; }
-    .sign-button:active { transform: scale(0.95); }
-    .sign-button img { max-width: 50px; max-height: 60px; pointer-events: none; }
-    .sign-button span { font-weight: 700; font-size: 0.85em; margin-top: 5px; pointer-events: none; color: #333; }
-    .dark-mode .sign-button span { color: #eee; }
-
-    .modal { display: none; position: fixed; z-index: 200; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); }
-    .modal-content { background: var(--card-bg-color); margin: 15% auto; padding: 25px; border-radius: 20px; width: 85%; max-width: 400px; position: relative; border: 4px solid var(--cute-pink); }
-    .config-option { display: block; width: 100%; padding: 12px; margin: 10px 0; border: none; border-radius: 12px; background: var(--primary-color); color: white; font-weight: 600; cursor: pointer; text-align: left; box-shadow: 0 3px 0px rgba(0,0,0,0.1); }
-    
-    #qr-result { background: white; padding: 10px; border-radius: 10px; margin-top: 10px; display: none; text-align: center; }
-    #qr-result canvas, #qr-result img { display: inline-block !important; }
-
-    #category-selector-panel { display: none; justify-content: center; gap: 10px; padding: 15px; margin-bottom: 10px; background: #FFF8E1; border-radius: 15px; border: 3px solid var(--cute-yellow); flex-wrap: wrap; }
-    .category-button { padding: 10px 15px; border-radius: 20px; border: none; color: white; font-weight: 700; cursor: pointer; }
-    
-    .keyboard-view { display: none; }
-    .extra-keyboard-view { position: absolute; width: 100%; left: 0; background: var(--card-bg-color); z-index: 10; padding: 15px; border-radius: 15px; box-shadow: 0 8px 30px rgba(0,0,0,0.2); box-sizing: border-box; }
-</style>
+    <title>Mensaje Secreto Mani_Manita</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <style>
+        @keyframes gradient-animation { 0% { background-position: 0% 50%; } 100% { background-position: 0% 50%; } }
+        body { font-family: 'Gochi Hand', cursive, sans-serif; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background: linear-gradient(-45deg, #ffccf9, #c4fff9, #a7f7be, #c0b3ff, #f7e6a7); background-size: 400% 400%; animation: gradient-animation 20s ease infinite; padding: 20px; overflow-x: hidden; }
+        .card-container { background-color: white; padding: 30px 40px; border-radius: 30px; box-shadow: 0 15px 35px rgba(255, 110, 140, 0.4); max-width: 90%; width: 700px; animation: bounceIn 1s ease-out; border: 5px solid #ff99cc; position: relative; z-index: 10; }
+        .logo { width: 90px; height: auto; margin-bottom: 10px; border: 4px solid #FFD700; border-radius: 50%; box-shadow: 0 0 15px 5px rgba(255, 215, 0, 0.6); animation: pulse 2s infinite ease-in-out; }
+        h1 { color: #ff6e8c; font-size: 2.2em; margin-top: 5px; margin-bottom: 20px; text-shadow: 2px 2px 0 #fff3e0; font-family: 'Patrick Hand', cursive; text-align: center; }
+        #output-area { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; min-height: 100px; padding: 15px; background-color: #fce4ec; border: 3px dashed #ff99cc; border-radius: 15px; margin-bottom: 20px; overflow-x: auto; }
+        .sign-output-image { width: 60px; height: 60px; margin: 5px; border: 2px solid #ff99cc; border-radius: 8px; background-color: white; }
+        .output-space { width: 25px; height: 100%; display: inline-block; }
+        #mensaje-texto { font-family: 'Gochi Hand', cursive; font-size: 1.5em; color: #666; line-height: 1.3; padding: 10px 0; text-align: center; border-top: 1px solid #ccc; margin-top: 15px; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        @keyframes bounceIn { 0% { transform: scale(0.8); opacity: 0; } 60% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); } }
+    </style>
 </head>
-
 <body>
-    <div class="container">
-        <div class="logo-section">
-            <img src="https://alex-moonie.github.io/ManiManita-Fotos/logo.png" alt="Logo">
-            <h1>Mani_Manita</h1>
-            <button id="open-config-modal" style="background:none; border:none; font-size:30px; cursor:pointer;">⚙️</button>
-        </div>
-
+    <div class="card-container">
+       
+        <img src="https://alex-moonie.github.io/ManiManita-Fotos/logo.png" alt="Logo Mani_Manita" class="logo">
+       
+        <h1>¡Un Mensajito para ti!</h1>
+       
         <div id="output-area"></div>
-        <textarea id="text-input-area" placeholder="Escribe tu mensaje aquí..."></textarea>
 
-        <div class="function-buttons">
-            <button id="num-mode-button">Números</button>
-            <button id="space-button">Espacio</button>
-            <button id="delete-button">Borrar</button>
-            <button id="clear-all-button">Limpiar</button>
-            <button id="mode-switch-button">Modo Texto ✍️</button>
-            <button id="listen-button">Escuchar 🔊</button>
-        </div>
-
-        <div id="main-interaction">
-            <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
-                <button id="toggle-extras-button" style="width:50px; height:50px; border-radius:50%; border:none; background:var(--cute-teal); color:white; font-size:25px; cursor:pointer; box-shadow: 0 4px 0px rgba(0,0,0,0.1);">➕</button>
-            </div>
-
-            <div id="category-selector-panel">
-                <button class="category-button" data-view="alpha" style="background:var(--cute-pink)">Alfabeto ABC</button>
-                <button class="category-button" data-view="concepts" style="background:var(--cute-teal)">Conceptos</button>
-                <button class="category-button" data-view="questions" style="background:var(--cute-orange)">Preguntas</button>
-            </div>
-
-            <div class="keyboard-wrapper" style="position: relative;">
-                <div class="keyboard-view" id="alpha-keyboard-view" style="display:block;">
-                    <div class="keyboard-grid">
-                        <script>
-                            const abc = ["A","B","C","D","E","F","G","H","I","J","K","L","LL","M","N","Ñ","O","P","Q","R","RR","S","T","U","V","W","X","Y","Z"];
-                            abc.forEach(l => document.write(`<button class="sign-button" data-letter="${l}"><img src="https://alex-moonie.github.io/ManiManita-Fotos/Letra${l}.jpg.png"><span>${l}</span></button>`));
-                        </script>
-                    </div>
-                </div>
-
-                <div id="number-keyboard-view" class="keyboard-view extra-keyboard-view">
-                    <div class="keyboard-grid">
-                        <script>
-                            for(let i=0; i<=10; i++) document.write(`<button class="sign-button" data-letter="${i}"><img src="https://alex-moonie.github.io/ManiManita-Fotos/${i}.png"><span>${i}</span></button>`);
-                        </script>
-                    </div>
-                </div>
-
-                <div id="concepts-keyboard-view" class="keyboard-view extra-keyboard-view">
-                    <div class="keyboard-grid">
-                        <button class="sign-button" data-letter="HOLA"><img src="https://alex-moonie.github.io/ManiManita-Fotos/hola.png"><span>HOLA</span></button>
-                        <button class="sign-button" data-letter="GRACIAS"><img src="https://alex-moonie.github.io/ManiManita-Fotos/GRACIAS.png"><span>GRACIAS</span></button>
-                        <button class="sign-button" data-letter="AYUDA"><img src="https://alex-moonie.github.io/ManiManita-Fotos/ayuda.png"><span>AYUDA</span></button>
-                        <button class="sign-button" data-letter="NOMBRE"><img src="https://alex-moonie.github.io/ManiManita-Fotos/nombre.png"><span>NOMBRE</span></button>
-                        <button class="sign-button" data-letter="COMER"><img src="https://alex-moonie.github.io/ManiManita-Fotos/comer.png"><span>COMER</span></button>
-                        <button class="sign-button" data-letter="BEBER"><img src="https://alex-moonie.github.io/ManiManita-Fotos/beber.png"><span>BEBER</span></button>
-                        <button class="sign-button" data-letter="BAÑO"><img src="https://alex-moonie.github.io/ManiManita-Fotos/baño.png"><span>BAÑO</span></button>
-                        <button class="sign-button" data-letter="ESPERA"><img src="https://alex-moonie.github.io/ManiManita-Fotos/esperar.png"><span>ESPERA</span></button>
-                        <button class="sign-button" data-letter="BIEN"><img src="https://alex-moonie.github.io/ManiManita-Fotos/BIEN.png"><span>BIEN</span></button>
-                        <button class="sign-button" data-letter="MAL"><img src="https://alex-moonie.github.io/ManiManita-Fotos/MAL.png"><span>MAL</span></button>
-                    </div>
-                </div>
-
-                <div id="questions-keyboard-view" class="keyboard-view extra-keyboard-view">
-                    <div class="keyboard-grid">
-                        <button class="sign-button" data-letter="¿CÓMO?"><img src="https://alex-moonie.github.io/ManiManita-Fotos/COMO.png"><span>¿CÓMO?</span></button>
-                        <button class="sign-button" data-letter="¿QUIÉN?"><img src="https://alex-moonie.github.io/ManiManita-Fotos/QUIEN.png"><span>¿QUIÉN?</span></button>
-                        <button class="sign-button" data-letter="¿QUÉ?"><img src="https://alex-moonie.github.io/ManiManita-Fotos/QUE.png"><span>¿QUÉ?</span></button>
-                        <button class="sign-button" data-letter="¿CUÁNDO?"><img src="https://alex-moonie.github.io/ManiManita-Fotos/CUANDO.png"><span>¿CUÁNDO?</span></button>
-                        <button class="sign-button" data-letter="¿DÓNDE?"><img src="https://alex-moonie.github.io/ManiManita-Fotos/DONDE.png"><span>¿DÓNDE?</span></button>
-                        <button class="sign-button" data-letter="¿POR QUÉ?"><img src="https://alex-moonie.github.io/ManiManita-Fotos/por%20que.png"><span>¿POR QUÉ?</span></button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <p id="mensaje-texto">Cargando mensaje...</p>
+       
     </div>
 
-    <div id="config-modal" class="modal">
-        <div class="modal-content">
-            <span id="close-config-modal" style="float:right; cursor:pointer; font-size:28px; font-weight:bold;">&times;</span>
-            <h3 style="color:var(--cute-pink); margin-top:0;">Opciones de Configuración</h3>
-            <button class="config-option" id="config-dark-mode-button">Cambiar a Modo Oscuro 🌙</button>
-            <button class="config-option" id="config-qr-button" style="background:var(--cute-orange)">Generar Código QR 🤝</button>
+    <script>
+        
+        const GITHUB_PAGES_URL = 'https://alex-moonie.github.io/ManiManita-Fotos/';
+        
+        const SIGN_MAP = {
+            'A': 'LetraA', 'B': 'LetraB', 'C': 'LetraC', 'D': 'LetraD', 'E': 'LetraE',
+            'F': 'LetraF', 'G': 'LetraG', 'H': 'LetraH', 'I': 'LetraI', 'J': 'LetraJ',
+            'K': 'LetraK', 'L': 'LetraL', 'LL': 'LetraLL', 'M': 'LetraM', 'N': 'LetraN',
+            'Ñ': 'LetraÑ', 'O': 'LetraO', 'P': 'LetraP', 'Q': 'LetraQ', 'R': 'LetraR',
+            'RR': 'LetraRR', 'S': 'LetraS', 'T': 'LetraT', 'U': 'LetraU', 'V': 'LetraV',
+            'W': 'LetraW', 'X': 'LetraX', 'Y': 'LetraY', 'Z': 'LetraZ',
+
+            // NÚMEROS CONCEPTO (se mapean a los dígitos del archivo .png)
+            'CERO': '0', 'UNO': '1', 'DOS': '2', 'TRES': '3', 'CUATRO': '4',
+            'CINCO': '5', 'SEIS': '6', 'SIETE': '7', 'OCHO': '8', 'NUEVE': '9', 'DIEZ': '10',
             
-            <div id="qr-result"></div>
+            // DÍGITOS NUMÉRICOS (para deletreo)
+            '0': '0', '1': '1', '2': '2', '3': '3', '4': '4', '5': '5',
+            '6': '6', '7': '7', '8': '8', '9': '9',
+            '10': '10', 
 
-            <button class="config-option" id="config-copy-button" style="background:var(--copy-pastel); color:#333;">Copiar Texto Generado 📋</button>
-            <button class="config-option" id="config-clear-button" style="background:var(--clear-pastel); color:#333;">Limpiar Área de Salida 🗑️</button>
-            <button class="config-option" id="config-info-button" style="background:var(--switch-mode-color)">Más información sobre Mani_Manita 💖</button>
-            <hr style="border:1px dashed var(--cute-teal); margin:15px 0;">
-            <p style="text-align:center; font-size:0.8em; color:gray; margin-bottom:0;">Hecho con 💖 para LSM - v1.2</p>
-        </div>
-    </div>
+            'HOLA': 'hola', 'AYUDA': 'ayuda', 'NOMBRE': 'nombre',
+            'COMER': 'comer', 'BEBER': 'beber', 'BAÑO': 'baño', 'ESPERA': 'esperar',
+            'GRACIAS': 'GRACIAS', 'BIEN': 'BIEN', 'MAL': 'MAL',
 
-<script>
-    const outputArea = document.getElementById('output-area');
-    const textInputArea = document.getElementById('text-input-area');
-    const categoryPanel = document.getElementById('category-selector-panel');
-    const toggleBtn = document.getElementById('toggle-extras-button');
-
-    toggleBtn.onclick = () => {
-        const isOpen = categoryPanel.style.display === 'flex';
-        categoryPanel.style.display = isOpen ? 'none' : 'flex';
-        toggleBtn.textContent = isOpen ? '➕' : '➖';
-    };
-
-    document.querySelectorAll('.category-button').forEach(btn => {
-        btn.onclick = () => {
-            document.querySelectorAll('.keyboard-view').forEach(v => v.style.display = 'none');
-            const target = btn.getAttribute('data-view') + "-keyboard-view";
-            document.getElementById(target).style.display = 'block';
+            '¿CÓMO?': 'COMO', '¿QUIÉN?': 'QUIEN', '¿QUÉ?': 'QUE',
+            '¿CUÁNDO?': 'CUANDO', '¿DÓNDE?': 'DONDE', '¿POR QUÉ?': 'por que'
         };
-    });
 
-    document.addEventListener('click', (e) => {
-        const btn = e.target.closest('.sign-button');
-        if (btn) {
+        function normalizeTextForMatching(text) {
+            return text
+                .toUpperCase()
+                .normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
+                .replace(/[¿?.,!]/g, '') 
+                .trim();
+        }
+
+        // FUNCIÓN CORREGIDA FINAL para manejar las extensiones de imagen correctamente
+        function appendLetter(letter) {
+            const outputArea = document.getElementById('output-area');
             const img = document.createElement('img');
-            img.src = btn.querySelector('img').src;
+            let fileName = SIGN_MAP[letter]; 
+            let extension = '.png'; // Por defecto es .png (para números y conceptos)
+
+            if (!fileName) {
+                console.error(`ERROR: No se encontró el mapeo para ${letter}`);
+                return;
+            }
+
+            // Lógica Específica: Si el nombre del archivo empieza con 'Letra' (Dactilología),
+            // usa la extensión doble '.jpg.png' que has identificado en tu código.
+            if (fileName.startsWith('Letra')) {
+                extension = '.jpg.png'; 
+            }
+            // Si no empieza con 'Letra', se queda con la extensión por defecto: .png (para 1.png, hola.png, etc.)
+            
+            let imageSrc = GITHUB_PAGES_URL + fileName + extension;
+            
+            img.onerror = function() {
+                console.error(`ERROR DE CARGA: No se encontró la imagen para ${letter}. URL intentada: ${imageSrc}.`);
+            };
+
+            img.src = imageSrc;
+            img.alt = `Seña ${letter}`;
             img.classList.add('sign-output-image');
-            img.alt = btn.getAttribute('data-letter');
             outputArea.appendChild(img);
         }
-    });
 
-    document.getElementById('listen-button').onclick = () => {
-        let texto = "";
-        if (textInputArea.style.display === 'block') {
-            texto = textInputArea.value;
-        } else {
-            outputArea.querySelectorAll('img').forEach(i => texto += i.alt + " ");
+        function convertTextToSigns(text) {
+            const outputArea = document.getElementById('output-area');
+            outputArea.innerHTML = '';
+            if (!text) return;
+
+            // Definiciones necesarias para el funcionamiento
+            const normalizedSignMap = {};
+            const allSignMapKeys = Object.keys(SIGN_MAP);
+            for (const key of allSignMapKeys) {
+                normalizedSignMap[normalizeTextForMatching(key)] = key; 
+            }
+            
+            const specialPhrases = { 'POR QUE': '¿POR QUÉ?' };
+
+            const rawWords = text.split(/\s+/).filter(word => word.length > 0);
+            const normalizedWords = rawWords.map(word => normalizeTextForMatching(word));
+
+            let i = 0;
+            while (i < rawWords.length) {
+                let matchedKey = null;
+                let matchedWordCount = 0;
+                const originalWord = rawWords[i]; 
+
+                // 1. Búsqueda de frases especiales (como 'POR QUE' -> '¿POR QUÉ?')
+                for (const normalizedPhrase in specialPhrases) {
+                    const phraseWords = normalizedPhrase.split(' ');
+                    if (i + phraseWords.length <= normalizedWords.length) {
+                        const currentPhraseSlice = normalizedWords.slice(i, i + phraseWords.length).join(' ');
+                        if (currentPhraseSlice === normalizedPhrase) {
+                            matchedKey = specialPhrases[normalizedPhrase];
+                            matchedWordCount = phraseWords.length;
+                            break;
+                        }
+                    }
+                }
+                
+                // 2. Búsqueda de conceptos o palabras completas
+                if (!matchedKey) {
+                    const normalizedWord = normalizedWords[i];
+                    
+                    if (normalizedWord in normalizedSignMap) {
+                        matchedKey = normalizedSignMap[normalizedWord];
+                        matchedWordCount = 1;
+                    }
+                    
+                    if (!matchedKey && originalWord in SIGN_MAP) {
+                        matchedKey = originalWord;
+                        matchedWordCount = 1;
+                    }
+                }
+
+                // 3. Renderizar imagen si se encontró un match
+                if (matchedKey) {
+                    appendLetter(matchedKey);
+                    i += matchedWordCount;
+                } else {
+                    // 4. Deletreo (Dactilología) si no hay match
+                    const wordForFingerspelling = originalWord.toUpperCase().replace(/[¿?.,!]/g, ''); 
+
+                    for (let j = 0; j < wordForFingerspelling.length; j++) {
+                        let char = wordForFingerspelling[j];
+                        let key = '';
+
+                        const twoChars = wordForFingerspelling.substring(j, j + 2);
+                        // Prioriza LL y RR
+                        if (allSignMapKeys.includes(twoChars) && (twoChars === 'LL' || twoChars === 'RR')) {
+                            key = twoChars;
+                            j++;
+                        } else if (allSignMapKeys.includes(char)) {
+                            key = char;
+                        }
+
+                        if (key) {
+                            appendLetter(key);
+                        }
+                    }
+                    i++;
+                }
+
+                // Añadir espacio después de cada palabra (si no es la última)
+                if (i < rawWords.length) {
+                    const spaceDiv = document.createElement('div');
+                    spaceDiv.classList.add('output-space');
+                    outputArea.appendChild(spaceDiv);
+                }
+            }
         }
-        if (texto.trim()) {
-            const ut = new SpeechSynthesisUtterance(texto);
-            ut.lang = 'es-MX';
-            window.speechSynthesis.speak(ut);
-        }
-    };
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            let mensajeCodificado = urlParams.get('m');
+            let mensajeElement = document.getElementById('mensaje-texto');
+            
+            let mensajeMostrar = "Error: No se encontró un mensaje válido.";
 
-    document.getElementById('clear-all-button').onclick = () => { outputArea.innerHTML = ''; textInputArea.value = ''; };
-    document.getElementById('delete-button').onclick = () => { if(outputArea.lastChild) outputArea.removeChild(outputArea.lastChild); };
-    document.getElementById('space-button').onclick = () => { const s = document.createElement('div'); s.className = 'output-space'; outputArea.appendChild(s); };
-    document.getElementById('num-mode-button').onclick = () => {
-        document.querySelectorAll('.keyboard-view').forEach(v => v.style.display = 'none');
-        document.getElementById('number-keyboard-view').style.display = 'block';
-    };
+            if (mensajeCodificado) {
+                try {
+                    mensajeMostrar = decodeURIComponent(mensajeCodificado);
+                    mensajeMostrar = mensajeMostrar.replace(/\+/g,' ');
+                    
+                    convertTextToSigns(mensajeMostrar);
 
-    document.getElementById('mode-switch-button').onclick = function() {
-        const isSign = textInputArea.style.display === 'none';
-        textInputArea.style.display = isSign ? 'block' : 'none';
-        document.getElementById('main-interaction').style.display = isSign ? 'none' : 'block';
-        this.textContent = isSign ? "Modo Señas 🤟" : "Modo Texto ✍️";
-    };
-
-    const modal = document.getElementById('config-modal');
-    document.getElementById('open-config-modal').onclick = () => modal.style.display = 'block';
-    document.getElementById('close-config-modal').onclick = () => {
-        modal.style.display = 'none';
-        document.getElementById('qr-result').style.display = 'none';
-    };
-
-    document.getElementById('config-dark-mode-button').onclick = () => document.body.classList.toggle('dark-mode');
-    document.getElementById('config-clear-button').onclick = () => { outputArea.innerHTML = ''; modal.style.display = 'none'; };
-    document.getElementById('config-copy-button').onclick = () => {
-        let t = ""; 
-        if (textInputArea.style.display === 'block') t = textInputArea.value;
-        else outputArea.querySelectorAll('img').forEach(i => t += i.alt + " ");
-        navigator.clipboard.writeText(t).then(() => alert("¡Texto copiado al portapapeles!"));
-    };
-
-    // --- LÓGICA DE QR MANTENIENDO EL ESTILO ORIGINAL ---
-    document.getElementById('config-qr-button').onclick = () => {
-        let texto = "";
-        if (textInputArea.style.display === 'block') {
-            texto = textInputArea.value;
-        } else {
-            outputArea.querySelectorAll('img').forEach(i => {
-                if(i.alt) texto += i.alt + " ";
-            });
-        }
-
-        if (texto.trim() === "") {
-            alert("¡Primero escribe o selecciona algunas señas!");
-            return;
-        }
-
-        // Link a tu visualizador
-        const urlVisor = "https://alex-moonie.github.io/ManiManita-Fotos/visualizador.html"; 
-        const urlFinal = `${urlVisor}?m=${encodeURIComponent(texto.trim())}`;
-
-        const qrContainer = document.getElementById('qr-result');
-        qrContainer.innerHTML = ""; 
-        qrContainer.style.display = "block";
-
-        new QRCode(qrContainer, {
-            text: urlFinal, 
-            width: 160,
-            height: 160,
-            colorDark: "#000000",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.M
+                } catch (e) {
+                    mensajeMostrar = "Error al leer el mensaje. El código es inválido.";
+                }
+            }
+            
+            mensajeElement.textContent = mensajeMostrar;
         });
-    };
-
-    document.getElementById('config-info-button').onclick = () => alert("Mani_Manita v1.2: Un proyecto para facilitar la comunicación con LSM.");
-</script>
+    </script>
 </body>
 </html>
