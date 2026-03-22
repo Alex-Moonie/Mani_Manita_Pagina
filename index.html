@@ -761,6 +761,12 @@
                     </div>
                 </div>
 
+             <div id="dictionary-keyboard-view" class="keyboard-view extra-keyboard-view">
+    <div id="dictionary-keyboard" class="keyboard-grid">
+        </div>
+</div>
+
+
             </div>
 
         </div>
@@ -1391,6 +1397,49 @@ function speakCurrentMessage() {
 
 // 3. Conectamos el botón con la función
 listenButton.addEventListener('click', speakCurrentMessage);
+
+
+
+
+
+
+
+
+
+ // Función para cargar el diccionario desde el archivo JSON
+async function cargarDiccionario() {
+    try {
+        const respuesta = await fetch('diccionario.json'); // Busca tu archivo
+        const datos = await respuesta.json(); // Lo convierte en algo que JS entiende
+        
+        const contenedor = document.getElementById('dictionary-keyboard');
+        contenedor.innerHTML = ''; // Limpiamos por si acaso
+
+        // Recorremos cada categoría (comida, emociones, etc.)
+        for (const categoria in datos) {
+            datos[categoria].forEach(item => {
+                // Creamos el botón
+                const boton = document.createElement('button');
+                boton.className = 'sign-button concept-button'; // Reutilizamos tus estilos
+                boton.setAttribute('data-letter', item.nombre);
+                
+                // Le ponemos la imagen y el texto
+                boton.innerHTML = `
+                    <img class="sign-image" src="${GITHUB_PAGES_URL}${item.imagen}" alt="Seña ${item.nombre}">
+                    <span>${item.nombre}</span>
+                `;
+                
+                // Agregamos el botón al contenedor
+                contenedor.appendChild(boton);
+            });
+        }
+    } catch (error) {
+        console.error("Error cargando el diccionario:", error);
+    }
+}
+
+// Llamamos a la función para que se ejecute al abrir la página
+cargarDiccionario();
 
 </script>
 
