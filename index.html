@@ -5,47 +5,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mani_Manita - Traductor de Lenguaje de Señas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+   
    
     <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <link rel="manifest" href="/Mani_Manita_Pagina/manifest.json">
    
+
 <style>                            
+    @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800&family=Fredoka:wght@400;700&family=Fredoka+One&family=Sacramento&display=swap');
+
     :root {
         --cute-pink: #FF69B4;      
         --cute-orange: #FFA500;    
         --cute-teal: #00CED1;      
         --cute-yellow: #FFD700;    
        
-        --space-pastel: #A2D9CE;    
-        --num-pastel: #FFC9A3;      
-        --copy-pastel: #FFF59D;      
-        --clear-pastel: #FFC0CB;    
-        --delete-pastel: #F4A5B7;    
-
+        --num-pastel: #FFB347;      
+        --space-pastel: #87CEEB;    
+        --copy-pastel: #FFF176;     
+        --clear-pastel: #FFB7C5;    
+        
+        --delete-pastel: #fff180;    
         --primary-color: var(--cute-teal);      
         --danger-color: var(--delete-pastel);
-        --switch-mode-color: #9370DB;          
+        --switch-mode-color: #b5aaff;          
        
-        --bg-gradient: linear-gradient(135deg,
-            #FFC0CB, #FFD7A8, #FFFACD,
-            #B0E0E6, #98FB98, #E6E6FA,
-            #FFC0CB
+        --bg-gradient: linear-gradient(135deg, 
+            #FBC2EB 0%,   
+            #FFDAB9 50%,  
+            #D4C1EC 100%  
         );
-        --card-bg-color: #F7F7FF;    
+
+        --card-bg-color: rgba(255, 255, 255, 0.4); 
         --text-color: #333333;                  
         --light-text-color: #777777;            
-        --border-color: #e0e0e0;                
+        --border-color: rgba(255, 255, 255, 0.5);                
        
         --concept-color: var(--cute-pink);      
         --connected-color: var(--cute-teal);    
 
         --dark-bg-color: #121212;
-        --dark-card-bg-color: #1E1E1E;
+        --dark-card-bg-color: rgba(30, 30, 30, 0.7); 
         --dark-text-color: #E0E0E0;
         --dark-border-color: #333333;
         --dark-gradient: linear-gradient(135deg, #2C3E50, #000000);
+    }
+
+    @keyframes popInSeña {
+        0% { transform: scale(0.6); opacity: 0; }
+        70% { transform: scale(1.1); }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
     }
 
     .dark-mode {
@@ -57,7 +73,8 @@
 
     .dark-mode .container {
         background-color: var(--dark-card-bg-color) !important;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), 0 0 15px rgba(50, 50, 50, 0.8) inset !important;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4) !important;
         border: 1px solid var(--dark-border-color);
     }
 
@@ -70,7 +87,7 @@
     }
 
     .dark-mode #output-area, .dark-mode #text-input-area, .dark-mode .sign-button {
-        background-color: #2D2D2D !important;
+        background-color: rgba(45, 45, 45, 0.6) !important;
         color: var(--dark-text-color) !important;
         border: 4px solid var(--cute-teal) !important;
     }
@@ -81,14 +98,7 @@
 
     .dark-mode .sign-button {
         border: 4px solid transparent !important;
-       
-        border-image-source: linear-gradient(
-            to right,
-            #FFC0CB,  
-            #FFDDAF,  
-            #A0E7E5,  
-            #DCD0FF    
-        ) !important;
+        border-image-source: linear-gradient(to right, #FFC0CB, #FFDDAF, #A0E7E5, #DCD0FF) !important;
         border-image-slice: 1 !important;
     }
 
@@ -97,16 +107,10 @@
     }
 
     .dark-mode .category-button, .dark-mode #category-selector-panel {
-        background-color: #333333 !important;
+        background-color: rgba(51, 51, 51, 0.7) !important;
     }
     .dark-mode .panel-control-button {
         background-color: var(--cute-pink) !important;
-    }
-
-    @keyframes gradientShift {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
     }
 
     body {
@@ -114,8 +118,8 @@
         margin: 0;
         padding: 0;
         background: var(--bg-gradient);
-        background-size: 400% 400%;
-        animation: gradientShift 25s ease infinite;
+        background-size: 300% 300%;
+        animation: gradientShift 10s ease infinite;
         color: var(--text-color);
         text-align: center;
         line-height: 1.6;
@@ -129,22 +133,25 @@
         max-width: 900px;
         width: 100%;
         background-color: var(--card-bg-color);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         border-radius: 20px;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15), 0 0 15px rgba(255, 255, 255, 0.8) inset;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
         padding: 20px 15px;
         margin-bottom: 20px;
         box-sizing: border-box;
-        transition: box-shadow 0.3s ease;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.4);
     }
    
     h1 {
         color: var(--cute-pink);
-        font-weight: 700;
+        font-weight: 800;
         margin-bottom: 5px;
-        font-size: 2.2em;
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-        font-family: 'Sacramento', cursive;
-        line-height: 1;
+        font-size: 2em;
+        text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.8), 3px 3px 5px rgba(0, 0, 0, 0.1);
+        font-family: 'Fredoka One', cursive;
+        line-height: 1.2;
     }
 
     .logo-section {
@@ -160,6 +167,7 @@
          margin: 0;
          flex-grow: 1;
          text-align: left;
+         font-size: 1.6em;
     }
    
     .logo-section img {
@@ -191,18 +199,13 @@
         background-color: var(--connected-color);
         box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-       
         display: flex;
         justify-content: center;
         align-items: center;
         text-align: center;
-       
         width: 100%;
         flex-shrink: 0;
         box-sizing: border-box;
-       
-        margin-left: auto;
-        margin-right: auto;
     }
    
     #output-area {
@@ -213,8 +216,8 @@
         font-size: 1.8em;
         text-align: left;
         border-radius: 15px;
-        background-color: #FFFFFF;
-        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+        background-color: rgba(255, 255, 255, 0.3); 
+        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
         display: flex; flex-wrap: wrap; align-items: flex-start;
         gap: 4px; overflow-y: auto;
         width: 100%;
@@ -224,12 +227,13 @@
     #output-area .sign-output-image {
         height: 45px;
         width: auto; object-fit: contain; vertical-align: middle;
-        transition: transform 0.2s;
+        animation: popInSeña 0.3s ease-out forwards; 
     }
 
     .output-space {
         width: 12px; height: 45px; background-color: var(--cute-yellow);
         border-radius: 5px; display: inline-block; vertical-align: middle; margin: 0 1px;
+        animation: popInSeña 0.3s ease-out forwards;
     }
    
     #text-input-area {
@@ -239,9 +243,9 @@
         border-radius: 15px;
         font-size: 1.2em; resize: vertical; margin-bottom: 15px;
         box-sizing: border-box;
-        font-family: 'Baloo 2', sans-serif;
-        background-color: #FFFFFF;
-        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+        font-family: 'Fredoka', cursive;
+        background-color: rgba(255, 255, 255, 0.3);
+        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
     }
 
     .function-buttons {
@@ -268,32 +272,17 @@
         min-width: 60px;
         box-sizing: border-box;
         color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
    
-    #num-mode-button {
-        background-color: var(--num-pastel) !important;
-        color: var(--text-color) !important;
-    }
-    #space-button {
-        background-color: var(--space-pastel) !important;
-        color: var(--text-color) !important;
-    }
-    #delete-button {
-        background-color: var(--delete-pastel) !important;
-        color: white !important;
-    }
-    #clear-all-button {
-        background-color: var(--clear-pastel) !important;
-        color: var(--text-color) !important;
-    }
-    #copy-button {
-        background-color: var(--copy-pastel) !important;
-        color: var(--text-color) !important;
-    }
-    #mode-switch-button {
-        background-color: var(--switch-mode-color) !important;
-        color: white !important;
-    }
+    #num-mode-button { background-color: var(--num-pastel) !important; color: white !important; }
+    #space-button { background-color: var(--space-pastel) !important; color: white !important; }
+    #delete-button { background-color: var(--delete-pastel) !important; color: white !important; }
+    #clear-all-button { background-color: var(--clear-pastel) !important; color: white !important; }
+    #copy-button { background-color: var(--copy-pastel) !important; color: var(--text-color) !important; }
+    #mode-switch-button { background-color: var(--switch-mode-color) !important; color: white !important; }
 
     .function-buttons button:active {
         transform: translateY(3px);
@@ -301,7 +290,7 @@
     }
 
     .function-buttons button:hover {
-         opacity: 0.9;
+         transform: translateY(-3px); 
          filter: brightness(1.1);
     }
    
@@ -318,18 +307,8 @@
         transition: all 0.2s;
     }
 
-
-    #main-interaction {
-        display: block;
-        width: 100%;
-    }
-
-    #extra-controls-panel {
-        display: flex;
-        justify-content: flex-end;
-        width: 100%;
-        margin-bottom: 5px;
-    }
+    #main-interaction { display: block; width: 100%; }
+    #extra-controls-panel { display: flex; justify-content: flex-end; width: 100%; margin-bottom: 5px; }
 
     #category-selector-panel {
         display: none;
@@ -340,7 +319,7 @@
         margin-bottom: 10px;
         border-top: 2px solid var(--cute-yellow);
         border-bottom: 2px solid var(--cute-yellow);
-        background-color: #FFF8E1;
+        background-color: rgba(255, 248, 225, 0.3);
         border-radius: 10px;
     }
    
@@ -351,208 +330,82 @@
         border: none !important;
         border-radius: 20px;
         color: white;
-        transition: transform 0.2s, box-shadow 0.2s;
+        transition: transform 0.2s;
         box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
         background-color: var(--concept-color);
     }
    
-    .category-button[data-view="questions"] {
-         background-color: var(--cute-teal);
-    }
-
-    /* ESTILO PARA EL BOTÓN DE DICCIONARIO */
-    .category-button[data-view="dictionary"] {
-         background-color: #9370DB; /* Un color violeta suave */
-    }
+    .category-button[data-view="questions"] { background-color: var(--cute-teal); }
+    .category-button[data-view="dictionary"] { background-color: #9370DB; }
 
     .category-button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 5px 8px rgba(0, 0, 0, 0.25);
     }
    
-    .keyboard-wrapper {
-         max-width: 100%;
-         width: 100%;
-         position: relative;
-    }
-
-    .keyboard-view {
-        display: none;
-    }
+    .keyboard-wrapper { max-width: 100%; width: 100%; position: relative; }
+    .keyboard-view { display: none; }
    
     .extra-keyboard-view {
         display: none;
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
+        top: 0; left: 0; width: 100%;
         padding-top: 10px;
-        background-color: var(--card-bg-color);
+        background-color: rgba(255, 255, 255, 0.4);
         border-radius: 10px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(15px);
         z-index: 10;
     }
 
-   
+    /* ESTO CORRIGE TODAS LAS CUADRÍCULAS A 4 COLUMNAS EN MÓVIL */
     .keyboard-grid {
-        display: grid;
-        gap: 8px;
-        margin: 0 !important;
-        width: 100%;
-        box-sizing: border-box;
-        padding-top: 0 !important;
-        border-top: none !important;
+        display: grid !important; 
+        gap: 8px !important; 
+        width: 100% !important;
+        box-sizing: border-box !important;
+        grid-template-columns: repeat(4, 1fr) !important; 
     }
 
-    #alpha-keyboard-view #keyboard {
-        grid-template-columns: repeat(4, 1fr);
-    }
-
-    #number-keyboard {
-         grid-template-columns: repeat(3, 1fr);
-    }
-    
-    /* Configuración para los teclados de conceptos, preguntas y DICCIONARIO */
-    #concepts-keyboard, #questions-keyboard, #dictionary-keyboard {
-        grid-template-columns: repeat(4, 1fr);
+    /* Excepto números que quedan en 3 */
+    #number-keyboard { 
+        grid-template-columns: repeat(3, 1fr) !important; 
     }
 
     .sign-button {
-        background-color: #FFFFFF;
+        background-color: rgba(255, 255, 255, 0.5); 
         border: 4px solid transparent;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         border-radius: 15px;
         cursor: pointer;
         transition: all 0.2s ease;
-        box-sizing: border-box;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         padding: 5px;
-       
         border-image-slice: 1;
-        border-image-source: linear-gradient(
-            to right,
-            var(--cute-yellow),  
-            var(--cute-pink),    
-            var(--cute-teal),    
-            var(--cute-orange)  
-        );
+        border-image-source: linear-gradient(to right, var(--cute-yellow), var(--cute-pink), var(--cute-teal), var(--cute-orange));
+        min-height: 85px;
+        width: 100% !important;
     }
    
     .sign-button:hover {
-        transform: scale(1.05);
-        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        transform: translateY(-5px); 
+        background-color: rgba(255, 255, 255, 0.8);
     }
    
-    .sign-button span {
-        font-family: 'Baloo 2', sans-serif;
-        font-weight: 700;
-    }
+    .sign-button span { font-family: 'Fredoka One', cursive; font-weight: 700; font-size: 0.65em; }
+    .sign-button img { max-width: 42px; max-height: 52px; width: auto; object-fit: contain; }
 
-    .sign-button img {
-         max-width: 50px;
-         max-height: 60px;
-         width: auto;
-         object-fit: contain;
-    }
-
-    .number-button {
-        background-color: var(--num-pastel) !important;
-        color: white;
-        font-weight: 700;
-        border: 4px solid transparent;
-    }
-   
-    .concept-button {
-        background-color: var(--concept-color);
-        color: white;
-        font-weight: 700;
-        border: 4px solid transparent;
-    }
-   
-    .number-button .sign-image, .concept-button .sign-image {
-         filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 5px rgba(0, 0, 0, 0.2));
-    }
-
+    .number-button { background-color: var(--num-pastel) !important; color: white; }
+    .concept-button { background-color: var(--concept-color); color: white; }
 
     @media (min-width: 800px) {
-       
-        .container {
-            max-width: 700px;
-            width: 100%;
-        }
-       
-        #main-interaction, #text-area-group, .logo-section, .function-buttons, .mode-status {
-             width: 100% !important;
-             order: initial !important;
-             margin-top: initial !important;
-        }
-       
-        #main-interaction {
-             margin-top: 15px;
-        }
-       
-        .container:not(.text-mode-active) #extra-controls-panel {
-             display: none !important;
-        }
-
-        .container:not(.text-mode-active) #category-selector-panel {
-             display: flex !important;
-             justify-content: center;
-             border-bottom: none !important;
-             margin-bottom: 5px;
-        }
-       
-        #alpha-keyboard-view #keyboard {
-             grid-template-columns: repeat(6, 1fr);
-        }
-
-        #number-keyboard {
-             grid-template-columns: repeat(4, 1fr);
-        }
-       
-         #concepts-keyboard, #questions-keyboard, #dictionary-keyboard {
-            grid-template-columns: repeat(6, 1fr);
-        }
-       
-         .extra-keyboard-view {
-            position: absolute;
-            top: 55px;
-            left: 0;
-            width: 100%;
-        }
-
-        .container:not(.text-mode-active) #text-input-area {
-            display: none;
-        }
-
-        .text-mode-active.container {
-             padding: 15px;
-        }
-       
-        .text-mode-active #main-interaction {
-            display: none;
-        }
-
-        .text-mode-active #text-area-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-        }
-
-        .text-mode-active #output-area {
-            min-height: 180px;
-            margin-bottom: 0px;
-            flex-grow: 1;
-        }
-       
-        .text-mode-active #text-input-area {
-            min-height: 120px;
-            margin-top: 10px;
-            margin-bottom: 0px;
-            display: block !important;
+        .container { max-width: 700px; }
+        .container:not(.text-mode-active) #category-selector-panel { display: flex !important; justify-content: center; border-bottom: none !important; }
+        
+        /* En PC se ven 6 columnas para todo */
+        .keyboard-grid { 
+            grid-template-columns: repeat(6, 1fr) !important; 
         }
     }
 
@@ -560,89 +413,48 @@
         display: none;
         position: fixed;
         z-index: 200;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.4);
+        left: 0; top: 0; width: 100%; height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
     }
 
     .modal-content {
-        background-color: var(--card-bg-color);
-        margin: 10% auto;
+        background-color: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        margin: 15% auto;
         padding: 25px;
-        border-radius: 20px;
-        width: 80%;
-        max-width: 400px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        border-radius: 30px;
+        width: 85%;
+        max-width: 450px;
+        border: 5px solid var(--cute-pink); 
+        text-align: center;
         position: relative;
-        color: var(--text-color);
-    }
-
-    .close-button {
-        color: var(--text-color);
-        float: right;
-        font-size: 35px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: color 0.2s;
-    }
-
-    .close-button:hover,
-    .close-button:focus {
-        color: var(--cute-pink);
-        text-decoration: none;
     }
 
     .modal-content h3 {
-        color: var(--cute-teal);
-        margin-top: 0;
-        font-weight: 700;
+        color: var(--cute-pink);
+        font-weight: 800;
+        margin-bottom: 20px;
     }
 
     .config-option {
-        display: block;
-        width: 100%;
-        padding: 12px;
-        margin: 10px 0;
-        border: none;
-        border-radius: 10px;
-        background-color: var(--primary-color);
-        color: white;
-        font-size: 1.1em;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background-color 0.2s, transform 0.2s;
-        box-shadow: 0 3px 0px rgba(0, 0, 0, 0.2);
+        display: block; width: 100%; padding: 15px; margin: 12px 0;
+        border: none; border-radius: 20px; color: white;
+        font-weight: 700; cursor: pointer; text-align: left;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
     }
 
-    .config-option:hover {
-        background-color: var(--cute-pink);
-        transform: translateY(-1px);
-    }
-
-    .config-option:active {
-        transform: translateY(2px);
-        box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2);
-    }
+    .config-option:nth-of-type(1) { background-color: #00CED1 !important; }
+    .config-option:nth-of-type(2) { background-color: #FFA500 !important; }
+    .config-option:nth-of-type(3) { background-color: #FFF176 !important; color: #333 !important; }
+    .config-option:nth-of-type(4) { background-color: #FFB7C5 !important; }
+    .config-option:nth-of-type(5) { background-color: #9370DB !important; }
 
     .dark-mode .modal-content {
         background-color: var(--dark-card-bg-color) !important;
     }
-    .dark-mode .config-option {
-        background-color: var(--cute-teal) !important;
-    }
-    .dark-mode .config-option:hover {
-        background-color: var(--cute-pink) !important;
-    }
-
-    #config-copy-button {
-        background-color: var(--copy-pastel) !important;
-        color: var(--text-color) !important;
-        box-shadow: 0 3px 0px var(--text-color) !important;
-    }
 </style>
+
 
 
 
@@ -651,7 +463,7 @@
 
         <div class="logo-section">
             <img src="https://alex-moonie.github.io/ManiManita-Fotos/logo.png" alt="Logo Mani_Manita">
-            <h1>Traductor LDS</h1><br>
+            <h1> Mani_Manita: Traductor LSM</h1><br>
        
             <button class="config-button" id="open-config-modal">⚙️</button>
         </div>
@@ -673,7 +485,7 @@
             <button id="clear-all-button">Limpiar Todo</button>
             <button id="mode-switch-button">Cambiar a Modo Texto</button>
             
-            <button id="listen-button" style="background-color: #9370DB !important; color: white !important;">
+            <button id="listen-button" style="background-color: #87e894 !important; color: white !important;">
                 Escuchar 🔊
             </button>
         </div>
@@ -787,7 +599,7 @@
            
             <button class="config-option" id="config-dark-mode-button">Cambiar a Modo Oscuro 🌙</button>
            
-            <button class="config-option" id="config-qr-button">Opciones de QR / Chat 🤝</button>
+            <button class="config-option" id="config-qr-button">Opciones de QR ✉️</button>
 
             <button class="config-option" id="config-copy-button">Copiar Texto Generado 📋</button>
            
