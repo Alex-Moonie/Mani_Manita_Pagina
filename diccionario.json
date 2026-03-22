@@ -1,32 +1,16 @@
 {
-  "senas": [
-    { "id": "CERO", "img": "0.png", "cat": "number" },
-    { "id": "UNO", "img": "1.png", "cat": "number" },
-    { "id": "DOS", "img": "2.png", "cat": "number" },
-    { "id": "TRES", "img": "3.png", "cat": "number" },
-    { "id": "CUATRO", "img": "4.png", "cat": "number" },
-    { "id": "CINCO", "img": "5.png", "cat": "number" },
-    { "id": "SEIS", "img": "6.png", "cat": "number" },
-    { "id": "SIETE", "img": "7.png", "cat": "number" },
-    { "id": "OCHO", "img": "8.png", "cat": "number" },
-    { "id": "NUEVE", "img": "9.png", "cat": "number" },
-    { "id": "DIEZ", "img": "10.png", "cat": "number" },
-    { "id": "HOLA", "img": "hola.png", "cat": "concepts" },
-    { "id": "GRACIAS", "img": "GRACIAS.png", "cat": "concepts" },
-    { "id": "AYUDA", "img": "ayuda.png", "cat": "concepts" },
-    { "id": "NOMBRE", "img": "nombre.png", "cat": "concepts" },
-    { "id": "COMER", "img": "comer.png", "cat": "concepts" },
-    { "id": "BEBER", "img": "beber.png", "cat": "concepts" },
-    { "id": "BAÑO", "img": "baño.png", "cat": "concepts" },
-    { "id": "ESPERA", "img": "esperar.png", "cat": "concepts" },
-    { "id": "BIEN", "img": "BIEN.png", "cat": "concepts" },
-    { "id": "MAL", "img": "MAL.png", "cat": "concepts" },
-    { "id": "¿CÓMO?", "img": "COMO.png", "cat": "concepts" },
-    { "id": "¿QUIÉN?", "img": "QUIEN.png", "cat": "questions" },
-    { "id": "¿QUÉ?", "img": "QUE.png", "cat": "questions" },
-    { "id": "¿CUÁNDO?", "img": "CUANDO.png", "cat": "questions" },
-    { "id": "¿DÓNDE?", "img": "DONDE.png", "cat": "questions" },
-    { "id": "¿POR QUÉ?", "img": "por que.png", "cat": "questions" }
+  "emociones": [
+    {"nombre": "FELIZ", "imagen": "feliz.png"},
+    {"nombre": "TRISTE", "imagen": "triste.png"},
+    {"nombre": "ENOJADO", "imagen": "enojado.png"}
+  ],
+  "comida": [
+    {"nombre": "MANZANA", "imagen": "manzana.png"},
+    {"nombre": "PAN", "imagen": "pan.png"},
+    {"nombre": "LECHE", "imagen": "leche.png"}
+  ],
+  "hogar": [
+    {"nombre": "CASA", "imagen": "casa.png"},
+    {"nombre": "CAMA", "imagen": "cama.png"}
   ]
 }
-
