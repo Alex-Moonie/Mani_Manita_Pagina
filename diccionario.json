@@ -12,9 +12,7 @@
   "hogar": [
     {"nombre": "CASA", "imagen": "casa.png"},
     {"nombre": "CAMA", "imagen": "cama.png"}
-  ]
-}
-{
+  ],
   "numeros": [
     {"nombre": "0", "imagen": "0.png"},
     {"nombre": "1", "imagen": "1.png"},
