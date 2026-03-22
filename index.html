@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
    
@@ -360,6 +360,11 @@
          background-color: var(--cute-teal);
     }
 
+    /* ESTILO PARA EL BOTÓN DE DICCIONARIO */
+    .category-button[data-view="dictionary"] {
+         background-color: #9370DB; /* Un color violeta suave */
+    }
+
     .category-button:hover {
         transform: translateY(-2px);
         box-shadow: 0 5px 8px rgba(0, 0, 0, 0.25);
@@ -406,7 +411,9 @@
     #number-keyboard {
          grid-template-columns: repeat(3, 1fr);
     }
-    #concepts-keyboard, #questions-keyboard {
+    
+    /* Configuración para los teclados de conceptos, preguntas y DICCIONARIO */
+    #concepts-keyboard, #questions-keyboard, #dictionary-keyboard {
         grid-template-columns: repeat(4, 1fr);
     }
 
@@ -506,7 +513,7 @@
              grid-template-columns: repeat(4, 1fr);
         }
        
-         #concepts-keyboard, #questions-keyboard {
+         #concepts-keyboard, #questions-keyboard, #dictionary-keyboard {
             grid-template-columns: repeat(6, 1fr);
         }
        
@@ -638,7 +645,8 @@
 </style>
 
 
- <body>
+
+<body>
     <div class="container" id="main-container">
 
         <div class="logo-section">
@@ -666,10 +674,9 @@
             <button id="mode-switch-button">Cambiar a Modo Texto</button>
             
             <button id="listen-button" style="background-color: #9370DB !important; color: white !important;">
-    Escuchar 🔊
-</button>
-
-            </div>
+                Escuchar 🔊
+            </button>
+        </div>
 
         <div id="main-interaction">
 
@@ -681,6 +688,7 @@
                 <button class="category-button" data-view="alpha">ABC</button>
                 <button class="category-button" data-view="concepts">Conceptos</button>
                 <button class="category-button" data-view="questions">Preguntas</button>
+                <button class="category-button" data-view="dictionary">Diccionario 📖</button>
             </div>
 
             <div class="keyboard-wrapper">
@@ -761,10 +769,10 @@
                     </div>
                 </div>
 
-             <div id="dictionary-keyboard-view" class="keyboard-view extra-keyboard-view">
-    <div id="dictionary-keyboard" class="keyboard-grid">
-        </div>
-</div>
+                <div id="dictionary-keyboard-view" class="keyboard-view extra-keyboard-view">
+                    <div id="dictionary-keyboard" class="keyboard-grid">
+                        </div>
+                </div>
 
 
             </div>
@@ -803,11 +811,14 @@
         </div>
     </div>
 
+
 <script>
     const alphaKeyboardView = document.getElementById('alpha-keyboard-view');
     const conceptsKeyboardView = document.getElementById('concepts-keyboard-view');
     const questionsKeyboardView = document.getElementById('questions-keyboard-view');
     const numberKeyboardView = document.getElementById('number-keyboard-view');
+    // NUEVA REFERENCIA: Contenedor del diccionario
+    const dictionaryKeyboardView = document.getElementById('dictionary-keyboard-view');
 
     const extraControlsPanel = document.getElementById('extra-controls-panel');
     const toggleExtrasButton = document.getElementById('toggle-extras-button');
@@ -1098,7 +1109,8 @@
     function toggleExtraKeyboardView(viewName) {
         const extraViews = {
             'concepts': conceptsKeyboardView,
-            'questions': questionsKeyboardView
+            'questions': questionsKeyboardView,
+            'dictionary': dictionaryKeyboardView // AGREGADO: Soporte para la vista del diccionario
         };
 
         if (currentExtraKeyboard && extraViews[currentExtraKeyboard]) {
@@ -1123,6 +1135,7 @@
             document.querySelector('.category-button[data-view="alpha"]').style.display = 'inline-block';
             document.querySelector('.category-button[data-view="concepts"]').style.display = 'inline-block';
             document.querySelector('.category-button[data-view="questions"]').style.display = 'inline-block';
+            document.querySelector('.category-button[data-view="dictionary"]').style.display = 'inline-block'; // AGREGADO
             return;
         }
 
@@ -1136,6 +1149,7 @@
 
             document.querySelector('.category-button[data-view="concepts"]').style.display = 'inline-block';
             document.querySelector('.category-button[data-view="questions"]').style.display = 'inline-block';
+            document.querySelector('.category-button[data-view="dictionary"]').style.display = 'inline-block'; // AGREGADO
 
         } else {
             categorySelectorPanel.style.display = 'none';
@@ -1359,77 +1373,54 @@
 
     toggleExtrasPanel(window.innerWidth >= 800 ? true : false);
 
-
-
-
-
-
 // --- FUNCIÓN DE SALIDA DE VOZ ---
 
-// 1. Obtenemos la referencia al nuevo botón
 const listenButton = document.getElementById('listen-button');
 
-// 2. Creamos la función para hablar
 function speakCurrentMessage() {
     let textToSpeak = "";
 
     if (currentMode === 'sign') {
-        // Si estamos en modo señas, usamos tu función existente getOutputText()
         textToSpeak = getOutputText();
     } else {
-        // Si estamos en modo texto, leemos lo que hay en el textarea
         textToSpeak = textInputArea.value;
     }
 
     if (textToSpeak.trim() !== "") {
-        // Configuración de la voz del navegador
         const utterance = new SpeechSynthesisUtterance(textToSpeak);
-        utterance.lang = 'es-MX'; // Español de México
-        utterance.rate = 0.9;     // Un poquito más lento para que se entienda mejor
-        utterance.pitch = 1.1;    // Un tono ligeramente más agudo/amigable
-        
-        // ¡Ordenamos que hable!
+        utterance.lang = 'es-MX';
+        utterance.rate = 0.9;
+        utterance.pitch = 1.1;
         window.speechSynthesis.speak(utterance);
     } else {
         alert("¡No hay nada que leer todavía! Intenta escribir algo primero. 😊");
     }
 }
 
-// 3. Conectamos el botón con la función
 listenButton.addEventListener('click', speakCurrentMessage);
 
+// --- LÓGICA DEL DICCIONARIO JSON ---
 
-
-
-
-
-
-
-
- // Función para cargar el diccionario desde el archivo JSON
 async function cargarDiccionario() {
     try {
-        const respuesta = await fetch('diccionario.json'); // Busca tu archivo
-        const datos = await respuesta.json(); // Lo convierte en algo que JS entiende
+        const respuesta = await fetch('diccionario.json'); 
+        if (!respuesta.ok) throw new Error("No se pudo cargar el archivo JSON");
         
+        const datos = await respuesta.json(); 
         const contenedor = document.getElementById('dictionary-keyboard');
-        contenedor.innerHTML = ''; // Limpiamos por si acaso
+        contenedor.innerHTML = ''; 
 
-        // Recorremos cada categoría (comida, emociones, etc.)
         for (const categoria in datos) {
             datos[categoria].forEach(item => {
-                // Creamos el botón
                 const boton = document.createElement('button');
-                boton.className = 'sign-button concept-button'; // Reutilizamos tus estilos
+                boton.className = 'sign-button concept-button'; 
                 boton.setAttribute('data-letter', item.nombre);
                 
-                // Le ponemos la imagen y el texto
                 boton.innerHTML = `
                     <img class="sign-image" src="${GITHUB_PAGES_URL}${item.imagen}" alt="Seña ${item.nombre}">
                     <span>${item.nombre}</span>
                 `;
                 
-                // Agregamos el botón al contenedor
                 contenedor.appendChild(boton);
             });
         }
@@ -1438,13 +1429,14 @@ async function cargarDiccionario() {
     }
 }
 
-// Llamamos a la función para que se ejecute al abrir la página
+// Llamamos a la función al cargar la página
 cargarDiccionario();
 
 </script>
 
-<script src="pantalla-carga.js"></script>
   
      
 </body>
                 </html>
+
+
