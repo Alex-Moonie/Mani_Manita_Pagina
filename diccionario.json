@@ -35,7 +35,7 @@
     {"nombre": "¿QUÉ PASÓ?", "imagen": "QUE PASO.png"},
     {"nombre": "¿QUÉ?", "imagen": "QUE.png"},
     {"nombre": "¿QUIÉN?", "imagen": "QUIEN.png"},
-    {"nombre": "¿POR QUÉ?", "imagen": "por qué.png"}
+    {"nombre": "¿POR QUÉ?", "imagen": "Por_que.png"}
   ],
   "conceptos": [
     {"nombre": "BIEN", "imagen": "BIEN.png"},
@@ -49,7 +49,7 @@
     {"nombre": "PARA", "imagen": "PARA.png"},
     {"nombre": "POR", "imagen": "POR.png"},
     {"nombre": "POR FAVOR", "imagen": "POR FAVOR.png"},
-    {"nombre": "PERDÓN", "imagen": "PERDÓN.png"}
+    {"nombre": "PERDÓN", "imagen": "Perdon.png"}
   ],
   "acciones": [
     {"nombre": "AYUDA", "imagen": "ayuda.png"},
